@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
 
 :root {
   --background: hsl(240, 23%, 8%);
@@ -198,6 +198,97 @@
     opacity: 0.3;
     animation: scanline 2s linear infinite;
   }
+
+  .matrix-rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(transparent 0%, var(--neon-green) 50%, transparent 100%);
+    background-size: 2px 50px;
+    animation: matrix-fall 3s linear infinite;
+  }
+
+  .glitch-line-1 {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--hot-pink), transparent);
+    opacity: 0.1;
+    animation: glitch-move-1 4s ease-in-out infinite;
+  }
+
+  .glitch-line-2 {
+    position: absolute;
+    top: 60%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--pixel-orange), transparent);
+    opacity: 0.15;
+    animation: glitch-move-2 3s ease-in-out infinite;
+  }
+
+  .glitch-line-3 {
+    position: absolute;
+    top: 80%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+    opacity: 0.1;
+    animation: glitch-move-3 5s ease-in-out infinite;
+  }
+
+  .floating-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 30%, var(--neon-green) 1px, transparent 1px),
+      radial-gradient(circle at 80% 70%, var(--hot-pink) 1px, transparent 1px),
+      radial-gradient(circle at 60% 20%, var(--pixel-orange) 1px, transparent 1px);
+    background-size: 200px 200px, 150px 150px, 300px 300px;
+    animation: float-particles 10s linear infinite;
+    opacity: 0.1;
+  }
+
+  .hexagonal-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 25% 25%, var(--neon-green) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, var(--hot-pink) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.05;
+    animation: grid-pulse 4s ease-in-out infinite;
+  }
+
+  .glow-orb {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--neon-green) 0%, transparent 70%);
+    opacity: 0.1;
+    animation: glow-float 8s ease-in-out infinite;
+  }
+
+  .glow-orb:nth-child(2) {
+    background: radial-gradient(circle, var(--hot-pink) 0%, transparent 70%);
+    animation-delay: 2s;
+    animation-duration: 6s;
+  }
+
+  .glow-orb:nth-child(3) {
+    background: radial-gradient(circle, var(--pixel-orange) 0%, transparent 70%);
+    animation-delay: 4s;
+    animation-duration: 10s;
+  }
 }
 
 @keyframes pulse-glow {
@@ -226,6 +317,51 @@
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
+}
+
+@keyframes matrix-fall {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes glitch-move-1 {
+  0%, 100% { transform: translateX(0); opacity: 0.1; }
+  25% { transform: translateX(-10px); opacity: 0.3; }
+  50% { transform: translateX(10px); opacity: 0.1; }
+  75% { transform: translateX(-5px); opacity: 0.2; }
+}
+
+@keyframes glitch-move-2 {
+  0%, 100% { transform: translateX(0); opacity: 0.15; }
+  33% { transform: translateX(15px); opacity: 0.25; }
+  66% { transform: translateX(-8px); opacity: 0.1; }
+}
+
+@keyframes glitch-move-3 {
+  0%, 100% { transform: translateX(0); opacity: 0.1; }
+  20% { transform: translateX(-15px); opacity: 0.2; }
+  40% { transform: translateX(5px); opacity: 0.15; }
+  60% { transform: translateX(-10px); opacity: 0.25; }
+  80% { transform: translateX(20px); opacity: 0.1; }
+}
+
+@keyframes float-particles {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.05; }
+  50% { opacity: 0.1; }
+}
+
+@keyframes glow-float {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.1; }
+  25% { transform: translate(-20px, -10px) scale(1.1); opacity: 0.15; }
+  50% { transform: translate(10px, -20px) scale(0.9); opacity: 0.08; }
+  75% { transform: translate(-10px, 10px) scale(1.05); opacity: 0.12; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.1; }
 }
 
 /* Responsive font sizes */
