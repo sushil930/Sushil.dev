@@ -32,7 +32,7 @@ export default function RetroParticles() {
     const colors = ['#00FF41', '#FF6B35', '#FF0080'];
 
     // Create particles
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 20; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -83,8 +83,8 @@ export default function RetroParticles() {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 100) {
-            ctx.globalAlpha = (100 - distance) / 100 * 0.1;
+          if (distance < 80) {
+            ctx.globalAlpha = (80 - distance) / 80 * 0.08;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
