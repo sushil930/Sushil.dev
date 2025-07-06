@@ -8,7 +8,7 @@ import ScanlineOverlay from "@/components/scanline-overlay";
 import AnimatedBackground from "@/components/animated-background";
 import FloatingCodeSymbols from "@/components/floating-code-symbols";
 import RetroParticles from "@/components/retro-particles";
-import PixelSnake from "@/components/pixel-snake";
+import SimplePixelSnake from "@/components/simple-pixel-snake";
 
 export default function Home() {
   return (
@@ -16,7 +16,7 @@ export default function Home() {
       <AnimatedBackground />
       <RetroParticles />
       <FloatingCodeSymbols />
-      <PixelSnake />
+      <SimplePixelSnake />
       <ScanlineOverlay />
       <div className="relative z-10">
         <Navigation />

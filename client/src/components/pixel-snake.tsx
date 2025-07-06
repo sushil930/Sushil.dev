@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface SnakeSegment {
   x: number;
@@ -21,14 +21,15 @@ interface TrailParticle {
 
 export default function PixelSnake() {
   const [snake, setSnake] = useState<SnakeSegment[]>([]);
-  const [direction, setDirection] = useState<Direction>({ x: 1, y: 0 });
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [nextDirectionChange, setNextDirectionChange] = useState(0);
   const [trailParticles, setTrailParticles] = useState<TrailParticle[]>([]);
+  
+  const directionRef = useRef<Direction>({ x: 1, y: 0 });
+  const nextDirectionChangeRef = useRef<number>(0);
 
   const segmentSize = 8;
   const snakeLength = 15;
-  const speed = 2;
+  const speed = 3;
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -59,6 +60,7 @@ export default function PixelSnake() {
     }
 
     setSnake(initialSnake);
+    nextDirectionChangeRef.current = Date.now() + 2000; // Initialize direction change timer
   }, [dimensions]);
 
   useEffect(() => {
@@ -71,23 +73,40 @@ export default function PixelSnake() {
         const newSnake = [...currentSnake];
         const head = newSnake[0];
         
+        const currentDirection = directionRef.current;
+        
         // Calculate new head position
         const newHead = {
-          x: head.x + direction.x * speed,
-          y: head.y + direction.y * speed
+          x: head.x + currentDirection.x * speed,
+          y: head.y + currentDirection.y * speed
         };
 
-        // Check boundaries and change direction if needed
-        let newDirection = { ...direction };
-        if (newHead.x <= 0 || newHead.x >= dimensions.width - segmentSize) {
-          newDirection.x = -direction.x;
-        }
-        if (newHead.y <= 0 || newHead.y >= dimensions.height - segmentSize) {
-          newDirection.y = -direction.y;
+        // Check boundaries and reflect direction if needed
+        let newDirection = { ...currentDirection };
+        let hitBoundary = false;
+
+        if (newHead.x <= 0) {
+          newDirection.x = Math.abs(currentDirection.x); // Reflect to positive
+          newHead.x = 0;
+          hitBoundary = true;
+        } else if (newHead.x >= dimensions.width - segmentSize) {
+          newDirection.x = -Math.abs(currentDirection.x); // Reflect to negative
+          newHead.x = dimensions.width - segmentSize;
+          hitBoundary = true;
         }
 
-        // Random direction changes
-        if (Date.now() > nextDirectionChange) {
+        if (newHead.y <= 0) {
+          newDirection.y = Math.abs(currentDirection.y); // Reflect to positive
+          newHead.y = 0;
+          hitBoundary = true;
+        } else if (newHead.y >= dimensions.height - segmentSize) {
+          newDirection.y = -Math.abs(currentDirection.y); // Reflect to negative
+          newHead.y = dimensions.height - segmentSize;
+          hitBoundary = true;
+        }
+
+        // Random direction changes (only if not hitting boundary)
+        if (!hitBoundary && Date.now() > nextDirectionChangeRef.current) {
           const directions = [
             { x: 1, y: 0 },   // right
             { x: -1, y: 0 },  // left
@@ -102,19 +121,14 @@ export default function PixelSnake() {
           if (Math.random() < 0.3) { // 30% chance to change direction
             const randomDirection = directions[Math.floor(Math.random() * directions.length)];
             newDirection = randomDirection;
-            setNextDirectionChange(Date.now() + 1000 + Math.random() * 3000); // 1-4 seconds
           }
+          nextDirectionChangeRef.current = Date.now() + 1000 + Math.random() * 3000; // 1-4 seconds
         }
 
-        setDirection(newDirection);
-
-        // Update head position with new direction
-        newHead.x = head.x + newDirection.x * speed;
-        newHead.y = head.y + newDirection.y * speed;
-
-        // Ensure head stays within bounds
-        newHead.x = Math.max(0, Math.min(dimensions.width - segmentSize, newHead.x));
-        newHead.y = Math.max(0, Math.min(dimensions.height - segmentSize, newHead.y));
+        // Update direction if it changed
+        if (newDirection.x !== currentDirection.x || newDirection.y !== currentDirection.y) {
+          directionRef.current = newDirection;
+        }
 
         // Add new head and remove tail
         newSnake.unshift(newHead);
@@ -140,9 +154,9 @@ export default function PixelSnake() {
       });
     };
 
-    const interval = setInterval(moveSnake, 100);
+    const interval = setInterval(moveSnake, 50);
     return () => clearInterval(interval);
-  }, [direction, dimensions, nextDirectionChange]);
+  }, [dimensions]); // Remove direction dependency to prevent recreation
 
   // Clean up expired trail particles
   useEffect(() => {
