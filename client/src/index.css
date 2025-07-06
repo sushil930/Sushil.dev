@@ -364,6 +364,14 @@
   100% { transform: translate(0, 0) scale(1); opacity: 0.1; }
 }
 
+@keyframes spin-horizontal {
+  0% { transform: scaleX(1) rotateY(0deg); }
+  25% { transform: scaleX(0.5) rotateY(90deg); }
+  50% { transform: scaleX(0.1) rotateY(180deg); }
+  75% { transform: scaleX(0.5) rotateY(270deg); }
+  100% { transform: scaleX(1) rotateY(360deg); }
+}
+
 /* Responsive font sizes */
 @media (max-width: 768px) {
   .font-pixel {

@@ -18,6 +18,7 @@ export default function SnakeGame() {
   const [coins, setCoins] = useState<Coin[]>([]);
   const [score, setScore] = useState(0);
   const coinIdRef = useRef(0);
+  const coinsRef = useRef<Coin[]>([]);
 
   const segmentSize = 12;
   const snakeLength = 25;
@@ -70,7 +71,7 @@ export default function SnakeGame() {
     setMousePosition({ x: startX, y: startY });
   }, [dimensions]);
 
-  // Spawn coins
+  // Spawn coins (maintain exactly 5 coins)
   useEffect(() => {
     if (dimensions.width === 0 || dimensions.height === 0) return;
 
@@ -82,25 +83,43 @@ export default function SnakeGame() {
         y: margin + Math.random() * (dimensions.height - 2 * margin)
       };
       
-      setCoins(prev => [...prev, newCoin]);
+      setCoins(prev => {
+        if (prev.length < 5) {
+          const newCoins = [...prev, newCoin];
+          coinsRef.current = newCoins;
+          return newCoins;
+        }
+        return prev;
+      });
     };
 
-    // Initial coins
-    for (let i = 0; i < 3; i++) {
-      setTimeout(() => spawnCoin(), i * 1000);
+    // Initial coins - spawn 5 coins
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => spawnCoin(), i * 200);
     }
 
-    // Spawn new coins periodically
+    // Check periodically if we need more coins
     const interval = setInterval(() => {
-      if (Math.random() < 0.7) {
-        spawnCoin();
-      }
-    }, 3000 + Math.random() * 2000);
+      setCoins(prev => {
+        if (prev.length < 5) {
+          const margin = 50;
+          const newCoin: Coin = {
+            id: coinIdRef.current++,
+            x: margin + Math.random() * (dimensions.width - 2 * margin),
+            y: margin + Math.random() * (dimensions.height - 2 * margin)
+          };
+          const newCoins = [...prev, newCoin];
+          coinsRef.current = newCoins;
+          return newCoins;
+        }
+        return prev;
+      });
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [dimensions]);
 
-  // Snake movement and collision detection
+  // Snake movement with integrated collision detection
   useEffect(() => {
     if (snake.length === 0 || dimensions.width === 0) return;
 
@@ -139,6 +158,29 @@ export default function SnakeGame() {
           newSnake.pop();
         }
 
+        // Check coin collisions with new head position
+        const newHead = newSnake[0];
+        const remainingCoins = [];
+        let collectedCount = 0;
+        
+        for (const coin of coinsRef.current) {
+          const coinDistance = Math.sqrt(
+            Math.pow(newHead.x - coin.x, 2) + Math.pow(newHead.y - coin.y, 2)
+          );
+          
+          if (coinDistance < (segmentSize + coinSize) / 2) {
+            collectedCount++;
+          } else {
+            remainingCoins.push(coin);
+          }
+        }
+        
+        if (collectedCount > 0) {
+          coinsRef.current = remainingCoins;
+          setCoins(remainingCoins);
+          setScore(prev => prev + collectedCount * 10);
+        }
+
         return newSnake;
       });
     };
@@ -146,35 +188,6 @@ export default function SnakeGame() {
     const interval = setInterval(moveSnake, 60);
     return () => clearInterval(interval);
   }, [mousePosition, dimensions]);
-
-  // Coin collision detection
-  useEffect(() => {
-    if (snake.length === 0 || coins.length === 0) return;
-
-    const head = snake[0];
-    setCoins(prevCoins => {
-      const newCoins = [...prevCoins];
-      let scoreIncrease = 0;
-      
-      for (let i = newCoins.length - 1; i >= 0; i--) {
-        const coin = newCoins[i];
-        const distance = Math.sqrt(
-          Math.pow(head.x - coin.x, 2) + Math.pow(head.y - coin.y, 2)
-        );
-        
-        if (distance < (segmentSize + coinSize) / 2) {
-          newCoins.splice(i, 1);
-          scoreIncrease += 10;
-        }
-      }
-      
-      if (scoreIncrease > 0) {
-        setScore(prev => prev + scoreIncrease);
-      }
-      
-      return newCoins;
-    });
-  }, [snake, coins]);
 
   const getSegmentColor = (index: number) => {
     if (index === 0) return '#00FF41';
@@ -216,15 +229,64 @@ export default function SnakeGame() {
               top: `${coin.y - coinSize/2}px`,
               width: `${coinSize}px`,
               height: `${coinSize}px`,
-              backgroundColor: '#FFD700',
-              border: '2px solid #FFA500',
-              borderRadius: '50%',
-              boxShadow: '0 0 10px #FFD700, inset 0 0 5px #FFA500',
-              animation: 'pulse 1.5s ease-in-out infinite',
               zIndex: 40,
               imageRendering: 'pixelated'
             }}
-          />
+          >
+            {/* Pixel circle coin with spinning animation */}
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                background: `
+                  radial-gradient(circle at 30% 30%, #FFD700 0%, #FFD700 20%, #FFA500 40%, #FF8C00 60%, #FF6B00 80%, #FF4500 100%),
+                  conic-gradient(from 0deg, #FFD700 0%, #FFA500 25%, #FFD700 50%, #FFA500 75%, #FFD700 100%)
+                `,
+                borderRadius: '50%',
+                border: '2px solid #FFA500',
+                boxShadow: '0 0 8px #FFD700, inset 0 0 4px #FFA500',
+                animation: 'spin-horizontal 2s linear infinite',
+                position: 'relative'
+              }}
+            >
+              {/* Inner pixel highlight */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '25%',
+                  left: '25%',
+                  width: '50%',
+                  height: '50%',
+                  background: 'radial-gradient(circle at 40% 40%, #FFFF80 0%, transparent 70%)',
+                  borderRadius: '50%',
+                  opacity: 0.8
+                }}
+              />
+              {/* Pixel dots for retro effect */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '20%',
+                  left: '60%',
+                  width: '2px',
+                  height: '2px',
+                  backgroundColor: '#FFFF80',
+                  borderRadius: '50%'
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '70%',
+                  left: '30%',
+                  width: '2px',
+                  height: '2px',
+                  backgroundColor: '#FFFF80',
+                  borderRadius: '50%'
+                }}
+              />
+            </div>
+          </div>
         ))}
         
         {/* Render Snake */}
