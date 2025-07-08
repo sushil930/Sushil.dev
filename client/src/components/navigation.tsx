@@ -6,10 +6,25 @@ export default function Navigation() {
   const [location, navigate] = useLocation();
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (location !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
+    setIsOpen(false);
+  };
+
+  const navigateToPage = (path: string) => {
+    navigate(path);
     setIsOpen(false);
   };
 
@@ -34,6 +49,12 @@ export default function Navigation() {
               className="font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
             >
               PORTFOLIO
+            </button>
+            <button
+              onClick={() => navigateToPage("/projects")}
+              className="font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
+            >
+              PROJECTS
             </button>
             <button
               onClick={() => scrollToSection("skills")}
@@ -72,6 +93,12 @@ export default function Navigation() {
               className="block font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
             >
               PORTFOLIO
+            </button>
+            <button
+              onClick={() => navigateToPage("/projects")}
+              className="block font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
+            >
+              PROJECTS
             </button>
             <button
               onClick={() => scrollToSection("skills")}

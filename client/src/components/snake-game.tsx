@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SnakeSegment {
   x: number;
@@ -12,6 +13,7 @@ interface Coin {
 }
 
 export default function SnakeGame() {
+  const isMobile = useIsMobile();
   const [snake, setSnake] = useState<SnakeSegment[]>([]);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -71,9 +73,9 @@ export default function SnakeGame() {
     setMousePosition({ x: startX, y: startY });
   }, [dimensions]);
 
-  // Spawn coins (maintain exactly 5 coins)
+  // Spawn coins (maintain exactly 5 coins) - only on desktop
   useEffect(() => {
-    if (dimensions.width === 0 || dimensions.height === 0) return;
+    if (dimensions.width === 0 || dimensions.height === 0 || isMobile) return;
 
     const spawnCoin = () => {
       const margin = 50;
@@ -117,7 +119,7 @@ export default function SnakeGame() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [dimensions]);
+  }, [dimensions, isMobile]);
 
   // Snake movement with integrated collision detection
   useEffect(() => {
@@ -158,21 +160,26 @@ export default function SnakeGame() {
           newSnake.pop();
         }
 
-        // Check coin collisions with new head position
+        // Check coin collisions with new head position - only on desktop
         const newHead = newSnake[0];
         const remainingCoins = [];
         let collectedCount = 0;
         
-        for (const coin of coinsRef.current) {
-          const coinDistance = Math.sqrt(
-            Math.pow(newHead.x - coin.x, 2) + Math.pow(newHead.y - coin.y, 2)
-          );
-          
-          if (coinDistance < (segmentSize + coinSize) / 2) {
-            collectedCount++;
-          } else {
-            remainingCoins.push(coin);
+        if (!isMobile) {
+          for (const coin of coinsRef.current) {
+            const coinDistance = Math.sqrt(
+              Math.pow(newHead.x - coin.x, 2) + Math.pow(newHead.y - coin.y, 2)
+            );
+            
+            if (coinDistance < (segmentSize + coinSize) / 2) {
+              collectedCount++;
+            } else {
+              remainingCoins.push(coin);
+            }
           }
+        } else {
+          // On mobile, preserve all coins (no collision detection)
+          remainingCoins.push(...coinsRef.current);
         }
         
         if (collectedCount > 0) {
@@ -210,17 +217,19 @@ export default function SnakeGame() {
 
   return (
     <>
-      {/* Score Box */}
-      <div className="fixed top-4 right-4 z-50 bg-[var(--dark-navy)] border-2 border-[var(--neon-green)] p-4 font-retro text-sm shadow-lg">
-        <div className="text-[var(--neon-green)] text-xs mb-1">SCORE</div>
-        <div className="text-[var(--pixel-orange)] text-lg font-bold">{score.toString().padStart(4, '0')}</div>
-        <div className="text-[var(--light-grey)] text-xs mt-1">COINS: {coins.length}</div>
-      </div>
+      {/* Score Box - Only show on desktop */}
+      {!isMobile && (
+        <div className="fixed top-4 right-4 z-50 bg-[var(--dark-navy)] border-2 border-[var(--neon-green)] p-4 font-retro text-sm shadow-lg">
+          <div className="text-[var(--neon-green)] text-xs mb-1">SCORE</div>
+          <div className="text-[var(--pixel-orange)] text-lg font-bold">{score.toString().padStart(4, '0')}</div>
+          <div className="text-[var(--light-grey)] text-xs mt-1">COINS: {coins.length}</div>
+        </div>
+      )}
 
       {/* Game Area */}
       <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
-        {/* Render Coins */}
-        {coins.map((coin) => (
+        {/* Render Coins - Only show on desktop */}
+        {!isMobile && coins.map((coin) => (
           <div
             key={coin.id}
             className="absolute"

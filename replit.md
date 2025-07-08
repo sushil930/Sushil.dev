@@ -100,6 +100,9 @@ This is a modern portfolio website built with React and Express.js, featuring a 
 
 ```
 Changelog:
+- July 08, 2025. Added project management functionality with full CRUD operations
+- July 08, 2025. Made snake game mobile-responsive (hides score/coins on mobile)
+- July 08, 2025. Backend project API routes completed with validation
 - July 06, 2025. Initial setup
 ```
 
