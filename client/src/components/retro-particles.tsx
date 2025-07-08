@@ -32,7 +32,7 @@ export default function RetroParticles() {
     const colors = ['#00FF41', '#FF6B35', '#FF0080'];
 
     // Create particles
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,

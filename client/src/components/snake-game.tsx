@@ -192,7 +192,7 @@ export default function SnakeGame() {
       });
     };
 
-    const interval = setInterval(moveSnake, 60);
+    const interval = setInterval(moveSnake, 100);
     return () => clearInterval(interval);
   }, [mousePosition, dimensions]);
 

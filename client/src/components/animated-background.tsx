@@ -46,7 +46,7 @@ export default function AnimatedBackground() {
     const newPixels: FloatingPixel[] = [];
     const colors = ['var(--neon-green)', 'var(--pixel-orange)', 'var(--hot-pink)'];
     
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 8; i++) {
       newPixels.push({
         id: i,
         x: Math.random() * dimensions.width,
@@ -121,7 +121,7 @@ export default function AnimatedBackground() {
       );
     };
 
-    const interval = setInterval(animatePixels, 50);
+    const interval = setInterval(animatePixels, 100);
     return () => clearInterval(interval);
   }, [dimensions]);
 

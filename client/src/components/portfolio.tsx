@@ -1,4 +1,7 @@
 import { ProjectCard } from "@/lib/types";
+import { useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { Project } from "@shared/schema";
 
 const projects: ProjectCard[] = [
   {
@@ -52,6 +55,20 @@ const projects: ProjectCard[] = [
 ];
 
 export default function Portfolio() {
+  const [, navigate] = useLocation();
+  
+  // Fetch real projects from API
+  const { data: apiProjects, isLoading } = useQuery<Project[]>({
+    queryKey: ['/api/projects'],
+  });
+
+  // Combine static projects with API projects
+  const allProjects = [...projects, ...(apiProjects || [])];
+
+  const handleProjectClick = (projectId: number) => {
+    navigate(`/project/${projectId}`);
+  };
+
   return (
     <section id="portfolio" className="py-20 scanline-overlay">
       <div className="container mx-auto px-4">
@@ -64,39 +81,108 @@ export default function Portfolio() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <div key={project.id} className="project-card">
-              <div className="mb-4">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-48 object-cover rounded border-2 border-[var(--pixel-orange)]"
-                />
+        {isLoading ? (
+          <div className="text-center text-[var(--neon-green)] font-retro">
+            LOADING PROJECTS...
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Static demo projects */}
+            {projects.map((project) => (
+              <div 
+                key={`static-${project.id}`} 
+                className="project-card cursor-pointer hover:scale-105 transition-transform duration-300"
+                onClick={() => handleProjectClick(project.id)}
+              >
+                <div className="mb-4">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-48 object-cover rounded border-2 border-[var(--pixel-orange)]"
+                  />
+                </div>
+                <h3 className="font-pixel text-sm text-[var(--pixel-orange)] mb-2">
+                  {project.title}
+                </h3>
+                <p className="font-retro text-sm text-[var(--light-grey)] mb-4">
+                  {project.description}
+                </p>
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(project.liveUrl, '_blank');
+                    }}
+                    className="retro-button retro-button-outline-green glitch-hover"
+                  >
+                    VIEW LIVE
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(project.codeUrl, '_blank');
+                    }}
+                    className="retro-button font-pixel text-xs text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-4 py-2 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-colors duration-200"
+                  >
+                    CODE
+                  </button>
+                </div>
               </div>
-              <h3 className="font-pixel text-sm text-[var(--pixel-orange)] mb-2">
-                {project.title}
-              </h3>
-              <p className="font-retro text-sm text-[var(--light-grey)] mb-4">
-                {project.description}
-              </p>
-              <div className="flex justify-between items-center">
-                <a
-                  href={project.liveUrl}
-                  className="retro-button retro-button-outline-green glitch-hover"
-                >
-                  VIEW LIVE
-                </a>
-                <a
-                  href={project.codeUrl}
-                  className="retro-button font-pixel text-xs text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-4 py-2 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-colors duration-200"
-                >
-                  CODE
-                </a>
+            ))}
+            
+            {/* API projects */}
+            {apiProjects?.map((project) => (
+              <div 
+                key={`api-${project.id}`} 
+                className="project-card cursor-pointer hover:scale-105 transition-transform duration-300 border-2 border-[var(--neon-green)]"
+                onClick={() => handleProjectClick(project.id)}
+              >
+                <div className="mb-4">
+                  <div className="w-full h-48 bg-gradient-to-br from-[var(--charcoal-grey)] to-[var(--dark-navy)] rounded border-2 border-[var(--neon-green)] flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-[var(--pixel-orange)] font-retro text-lg mb-2">
+                        [{project.title}]
+                      </div>
+                      <div className="text-[var(--light-grey)] text-sm">
+                        Click to view details
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <h3 className="font-pixel text-sm text-[var(--neon-green)] mb-2">
+                  {project.title}
+                </h3>
+                <p className="font-retro text-sm text-[var(--light-grey)] mb-4">
+                  {project.description}
+                </p>
+                <div className="flex justify-between items-center">
+                  {project.liveUrl && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(project.liveUrl, '_blank');
+                      }}
+                      className="retro-button retro-button-outline-green glitch-hover"
+                    >
+                      VIEW LIVE
+                    </button>
+                  )}
+                  {project.githubUrl && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(project.githubUrl, '_blank');
+                      }}
+                      className="retro-button font-pixel text-xs text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-4 py-2 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-colors duration-200"
+                    >
+                      CODE
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
