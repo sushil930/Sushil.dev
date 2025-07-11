@@ -33,7 +33,7 @@ export default function Navigation() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <div className="font-pixel text-[var(--neon-green)] text-xs glow-text">
-            ALEX.DEV
+            SUSHIL.DEV
           </div>
           
           {/* Desktop Navigation */}
@@ -48,14 +48,9 @@ export default function Navigation() {
               onClick={() => scrollToSection("portfolio")}
               className="font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
             >
-              PORTFOLIO
+              PORJECTS
             </button>
-            <button
-              onClick={() => navigateToPage("/projects")}
-              className="font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
-            >
-              PROJECTS
-            </button>
+
             <button
               onClick={() => scrollToSection("skills")}
               className="font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
@@ -94,12 +89,7 @@ export default function Navigation() {
             >
               PORTFOLIO
             </button>
-            <button
-              onClick={() => navigateToPage("/projects")}
-              className="block font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"
-            >
-              PROJECTS
-            </button>
+
             <button
               onClick={() => scrollToSection("skills")}
               className="block font-pixel text-xs text-[var(--light-grey)] hover:text-[var(--neon-green)] transition-colors duration-200"

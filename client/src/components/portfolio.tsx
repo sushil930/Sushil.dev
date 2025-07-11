@@ -1,7 +1,6 @@
 import { ProjectCard } from "@/lib/types";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Project } from "@shared/schema";
 
 const projects: ProjectCard[] = [
   {
@@ -58,7 +57,7 @@ export default function Portfolio() {
   const [, navigate] = useLocation();
   
   // Fetch real projects from API
-  const { data: apiProjects, isLoading } = useQuery<Project[]>({
+  const { data: apiProjects, isLoading } = useQuery<ProjectCard[]>({
     queryKey: ['/api/projects'],
   });
 
@@ -73,8 +72,8 @@ export default function Portfolio() {
     <section id="portfolio" className="py-20 scanline-overlay">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="font-pixel text-xl md:text-2xl text-[var(--neon-green)] mb-4">
-            PORTFOLIO
+          <h2 className="font-pixel text-2xl md:text-3xl text-[var(--neon-green)] mb-4">
+            PROJECTS
           </h2>
           <div className="font-retro text-lg text-[var(--light-grey)]">
             Check out my latest projects

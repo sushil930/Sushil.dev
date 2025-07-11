@@ -24,7 +24,7 @@ export default function SnakeGame() {
 
   const segmentSize = 12;
   const snakeLength = 25;
-  const speed = 3;
+  const speed = 6.5;
   const coinSize = 16;
 
   // Initialize dimensions
@@ -219,7 +219,7 @@ export default function SnakeGame() {
     <>
       {/* Score Box - Only show on desktop */}
       {!isMobile && (
-        <div className="fixed top-4 right-4 z-50 bg-[var(--dark-navy)] border-2 border-[var(--neon-green)] p-4 font-retro text-sm shadow-lg">
+        <div className="fixed top-10 right-4 z-50 bg-[var(--dark-navy)] border-2 border-[var(--neon-green)] p-4 font-retro text-sm shadow-lg">
           <div className="text-[var(--neon-green)] text-xs mb-1">SCORE</div>
           <div className="text-[var(--pixel-orange)] text-lg font-bold">{score.toString().padStart(4, '0')}</div>
           <div className="text-[var(--light-grey)] text-xs mt-1">COINS: {coins.length}</div>

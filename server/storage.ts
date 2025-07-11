@@ -1,4 +1,4 @@
-import { users, type User, type InsertUser, type Contact, type InsertContact, type Project, type InsertProject } from "@shared/schema";
+import { users, type User, type InsertUser, type Contact, type InsertContact } from "@shared/schema";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -9,28 +9,20 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   createContact(contact: InsertContact): Promise<Contact>;
   getAllContacts(): Promise<Contact[]>;
-  createProject(project: InsertProject): Promise<Project>;
-  getAllProjects(): Promise<Project[]>;
-  getProject(id: number): Promise<Project | undefined>;
-  updateProject(id: number, project: Partial<InsertProject>): Promise<Project>;
-  deleteProject(id: number): Promise<void>;
+
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private contacts: Map<number, Contact>;
-  private projects: Map<number, Project>;
   currentId: number;
   currentContactId: number;
-  currentProjectId: number;
 
   constructor() {
     this.users = new Map();
     this.contacts = new Map();
-    this.projects = new Map();
     this.currentId = 1;
     this.currentContactId = 1;
-    this.currentProjectId = 1;
   }
 
   async getUser(id: number): Promise<User | undefined> {
@@ -65,43 +57,7 @@ export class MemStorage implements IStorage {
     return Array.from(this.contacts.values());
   }
 
-  async createProject(insertProject: InsertProject): Promise<Project> {
-    const id = this.currentProjectId++;
-    const project: Project = { 
-      ...insertProject, 
-      id, 
-      createdAt: new Date() 
-    };
-    this.projects.set(id, project);
-    return project;
-  }
 
-  async getAllProjects(): Promise<Project[]> {
-    return Array.from(this.projects.values());
-  }
-
-  async getProject(id: number): Promise<Project | undefined> {
-    return this.projects.get(id);
-  }
-
-  async updateProject(id: number, projectData: Partial<InsertProject>): Promise<Project> {
-    const existingProject = this.projects.get(id);
-    if (!existingProject) {
-      throw new Error(`Project with id ${id} not found`);
-    }
-    
-    const updatedProject: Project = {
-      ...existingProject,
-      ...projectData,
-    };
-    
-    this.projects.set(id, updatedProject);
-    return updatedProject;
-  }
-
-  async deleteProject(id: number): Promise<void> {
-    this.projects.delete(id);
-  }
 }
 
 export const storage = new MemStorage();

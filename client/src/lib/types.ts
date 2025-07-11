@@ -5,8 +5,9 @@ export interface ProjectCard {
   title: string;
   description: string;
   image: string;
-  liveUrl: string;
-  codeUrl: string;
+  liveUrl?: string;
+  githubUrl?: string;
+  codeUrl?: string; // Keeping this for backward compatibility
 }
 
 export interface Skill {

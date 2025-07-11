@@ -11,9 +11,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const socialLinks = [
-  { name: "GitHub", abbr: "GH", url: "https://github.com", color: "neon-green" },
-  { name: "LinkedIn", abbr: "LI", url: "https://linkedin.com", color: "hot-pink" },
-  { name: "Twitter", abbr: "TW", url: "https://twitter.com", color: "pixel-orange" },
+  { name: "GitHub", abbr: "GH", url: "https://github.com", color: "neon-green", icon: "/pixel-icons/pixel-github.png" },
+  { name: "LinkedIn", abbr: "LI", url: "https://linkedin.com", color: "hot-pink", icon: "/pixel-icons/pixel-linkedin.png" },
+  { name: "Instagram", abbr: "IG", url: "https://instagram.com", color: "pixel-orange", icon: "/pixel-icons/pixel-instagram.png" },
 ];
 
 export default function Contact() {
@@ -77,7 +77,7 @@ export default function Contact() {
                 <div>
                   <div className="font-pixel text-xs text-[var(--neon-green)]">EMAIL</div>
                   <div className="font-retro text-sm text-[var(--light-grey)]">
-                    alex@alexdev.com
+                    sushilpatel5113@gmail.com
                   </div>
                 </div>
               </div>
@@ -88,7 +88,7 @@ export default function Contact() {
                 <div>
                   <div className="font-pixel text-xs text-[var(--hot-pink)]">PHONE</div>
                   <div className="font-retro text-sm text-[var(--light-grey)]">
-                    +1 (555) 123-4567
+                    +91 9302298310
                   </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function Contact() {
                 <div>
                   <div className="font-pixel text-xs text-[var(--pixel-orange)]">LOCATION</div>
                   <div className="font-retro text-sm text-[var(--light-grey)]">
-                    San Francisco, CA
+                    Bilaspur, Chhattisgarh, India
                   </div>
                 </div>
               </div>
@@ -116,11 +116,9 @@ export default function Contact() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`retro-button w-12 h-12 bg-[var(--darker-blue)] border-2 border-[var(--${link.color})] flex items-center justify-center rounded hover:bg-[var(--${link.color})] transition-colors duration-200`}
+                    className={`w-12 h-12 flex items-center justify-center rounded transition-all duration-200 hover:scale-110`}
                   >
-                    <span className={`font-pixel text-xs text-[var(--${link.color})] hover:text-[var(--dark-navy)]`}>
-                      {link.abbr}
-                    </span>
+                    <img src={link.icon} alt={link.name} className="w-full h-full object-contain p-2" />
                   </a>
                 ))}
               </div>

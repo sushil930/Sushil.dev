@@ -1,3 +1,5 @@
+import CountingLevel from "./counting-level";
+
 export default function Hero() {
   const scrollToPortfolio = () => {
     const element = document.getElementById("portfolio");
@@ -17,11 +19,11 @@ export default function Hero() {
             <h1 className="font-pixel text-2xl md:text-3xl lg:text-4xl mb-6 leading-relaxed">
               <span className="text-[var(--light-grey)]">FRONTEND</span><br />
               <span className="text-[var(--pixel-orange)]">DEVELOPER</span><br />
-              <span className="text-[var(--hot-pink)]">LEVEL 99</span>
+              <CountingLevel targetLevel={99} duration={8000} />
             </h1>
             <div className="font-retro text-lg md:text-xl mb-8 leading-relaxed">
               <p className="mb-4">
-                Hi, I'm Alex - a passionate frontend developer who crafts pixel-perfect digital experiences.
+                Hi, I'm Sushil - a passionate frontend developer who crafts pixel-perfect digital experiences.
               </p>
               <p>I specialize in React, Vue, and modern JavaScript frameworks.</p>
             </div>
