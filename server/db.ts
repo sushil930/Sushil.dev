@@ -7,13 +7,13 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Path to your service account key file
-const serviceAccountPath = path.resolve(__dirname, 'pixelDev-serviceaccountkey.json');
-
-// Initialize Firebase Admin SDK
 if (!getApps().length) {
+  const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+  if (!serviceAccountKey) {
+    throw new Error('The FIREBASE_SERVICE_ACCOUNT_KEY environment variable is not set.');
+  }
   initializeApp({
-    credential: cert(serviceAccountPath)
+    credential: cert(JSON.parse(serviceAccountKey))
   });
 }
 
