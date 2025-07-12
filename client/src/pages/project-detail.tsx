@@ -276,16 +276,24 @@ export default function ProjectDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--dark-navy)] text-white">
+    <div className="min-h-screen bg-[var(--dark-navy)] text-white relative">
+      {/* Animated background */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-20 left-10 w-2 h-2 bg-[var(--neon-green)] animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-2 h-2 bg-[var(--pixel-orange)] animate-pulse delay-500"></div>
+        <div className="absolute top-60 left-1/3 w-2 h-2 bg-[var(--hot-pink)] animate-pulse delay-1000"></div>
+        <div className="absolute bottom-40 right-1/4 w-2 h-2 bg-[var(--neon-green)] animate-pulse delay-1500"></div>
+      </div>
+
       {/* Header */}
-      <div className="border-b border-[var(--neon-green)] bg-[var(--dark-navy)]/90 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="border-b-2 border-[var(--neon-green)] bg-[var(--dark-navy)]/95 backdrop-blur-sm sticky top-0 z-50 shadow-lg shadow-[var(--neon-green)]/20">
+        <div className="container mx-auto px-4 py-6 flex items-center justify-between">
           <Button 
             onClick={() => navigate('/')}
             variant="ghost"
-            className="font-pixel text-[var(--neon-green)] hover:bg-[var(--neon-green)]/10"
+            className="font-pixel text-[var(--neon-green)] hover:bg-[var(--neon-green)]/20 border border-transparent hover:border-[var(--neon-green)] transition-all duration-300"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="w-5 h-5 mr-2" />
             BACK TO HOME
           </Button>
           
@@ -293,7 +301,7 @@ export default function ProjectDetail() {
             {project.liveUrl && project.liveUrl !== '#' && (
               <Button 
                 onClick={() => window.open(project.liveUrl, '_blank')}
-                className="retro-button retro-button-outline-green"
+                className="font-pixel text-sm bg-[var(--neon-green)]/10 text-[var(--neon-green)] border-2 border-[var(--neon-green)] px-6 py-3 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 LIVE DEMO
@@ -302,7 +310,7 @@ export default function ProjectDetail() {
             {project.githubUrl && project.githubUrl !== '#' && (
               <Button 
                 onClick={() => window.open(project.githubUrl, '_blank')}
-                className="retro-button font-pixel text-xs text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-4 py-2 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)]"
+                className="font-pixel text-sm bg-[var(--hot-pink)]/10 text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-6 py-3 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
               >
                 <Github className="w-4 h-4 mr-2" />
                 SOURCE CODE
@@ -312,70 +320,87 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-12 relative z-10">
         {/* Hero Section */}
-        <div className="mb-12">
-          <div className="mb-6">
-            <h1 className="font-pixel text-3xl md:text-4xl text-[var(--neon-green)] mb-4">
-              {project.title}
-            </h1>
-            <p className="font-retro text-lg text-[var(--light-grey)] mb-6">
+        <div className="mb-16">
+          <div className="mb-8">
+            <div className="mb-6">
+              <h1 className="font-pixel text-4xl md:text-5xl lg:text-6xl text-[var(--neon-green)] mb-6 text-center md:text-left leading-tight">
+                {project.title}
+              </h1>
+              <div className="w-24 h-1 bg-gradient-to-r from-[var(--neon-green)] to-[var(--pixel-orange)] mb-6"></div>
+            </div>
+            
+            <p className="font-retro text-xl md:text-2xl text-[var(--light-grey)] mb-8 leading-relaxed">
               {project.description}
             </p>
             
             {/* Project Meta */}
-            <div className="flex flex-wrap gap-4 mb-6">
+            <div className="flex flex-wrap gap-6 mb-8">
               {project.category && (
-                <div className="flex items-center gap-2 text-[var(--pixel-orange)]">
-                  <Tag className="w-4 h-4" />
-                  <span className="font-retro text-sm">{project.category}</span>
+                <div className="flex items-center gap-3 bg-[var(--pixel-orange)]/10 border border-[var(--pixel-orange)] rounded-lg px-4 py-2">
+                  <Tag className="w-5 h-5 text-[var(--pixel-orange)]" />
+                  <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.category}</span>
                 </div>
               )}
               {project.duration && (
-                <div className="flex items-center gap-2 text-[var(--pixel-orange)]">
-                  <Calendar className="w-4 h-4" />
-                  <span className="font-retro text-sm">{project.duration}</span>
+                <div className="flex items-center gap-3 bg-[var(--neon-green)]/10 border border-[var(--neon-green)] rounded-lg px-4 py-2">
+                  <Calendar className="w-5 h-5 text-[var(--neon-green)]" />
+                  <span className="font-retro text-[var(--neon-green)] font-semibold">{project.duration}</span>
                 </div>
               )}
               {project.team && (
-                <div className="flex items-center gap-2 text-[var(--pixel-orange)]">
-                  <Users className="w-4 h-4" />
-                  <span className="font-retro text-sm">{project.team}</span>
+                <div className="flex items-center gap-3 bg-[var(--hot-pink)]/10 border border-[var(--hot-pink)] rounded-lg px-4 py-2">
+                  <Users className="w-5 h-5 text-[var(--hot-pink)]" />
+                  <span className="font-retro text-[var(--hot-pink)] font-semibold">{project.team}</span>
                 </div>
               )}
               {project.status && (
-                <Badge 
+                <div 
                   style={{ 
                     backgroundColor: `${getStatusColor(project.status)}20`,
                     borderColor: getStatusColor(project.status),
-                    color: getStatusColor(project.status)
                   }}
-                  className="font-pixel text-xs border"
+                  className="flex items-center gap-3 border rounded-lg px-4 py-2"
                 >
-                  {project.status.toUpperCase()}
-                </Badge>
+                  <div 
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: getStatusColor(project.status) }}
+                  ></div>
+                  <span 
+                    className="font-pixel text-sm font-bold uppercase"
+                    style={{ color: getStatusColor(project.status) }}
+                  >
+                    {project.status}
+                  </span>
+                </div>
               )}
             </div>
           </div>
 
           {/* Main Image */}
-          <div className="mb-8">
+          <div className="mb-12 relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-green)]/20 to-[var(--pixel-orange)]/20 rounded-lg blur-xl transform scale-105 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-64 md:h-96 object-cover rounded border-2 border-[var(--pixel-orange)]"
+              className="relative w-full h-64 md:h-96 lg:h-[500px] object-cover rounded-lg border-2 border-[var(--pixel-orange)] shadow-2xl shadow-[var(--pixel-orange)]/20 transition-transform duration-300 group-hover:scale-[1.02]"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--dark-navy)]/50 to-transparent rounded-lg"></div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-12">
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-12">
             {/* Description */}
             {project.fullDescription && (
-              <section className="mb-8">
-                <h2 className="font-pixel text-xl text-[var(--neon-green)] mb-4">OVERVIEW</h2>
-                <p className="font-retro text-[var(--light-grey)] leading-relaxed">
+              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-8 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-1 bg-[var(--neon-green)]"></div>
+                  <h2 className="font-pixel text-2xl text-[var(--neon-green)]">PROJECT OVERVIEW</h2>
+                </div>
+                <p className="font-retro text-lg text-[var(--light-grey)] leading-relaxed">
                   {project.fullDescription}
                 </p>
               </section>
@@ -383,45 +408,85 @@ export default function ProjectDetail() {
 
             {/* Features */}
             {project.features && project.features.length > 0 && (
-              <section className="mb-8">
-                <h2 className="font-pixel text-xl text-[var(--neon-green)] mb-4">KEY FEATURES</h2>
-                <ul className="space-y-2">
+              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-8 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-1 bg-[var(--pixel-orange)]"></div>
+                  <h2 className="font-pixel text-2xl text-[var(--pixel-orange)]">KEY FEATURES</h2>
+                </div>
+                <div className="grid gap-4">
                   {project.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-[var(--pixel-orange)] mt-2 flex-shrink-0"></div>
-                      <span className="font-retro text-[var(--light-grey)]">{feature}</span>
-                    </li>
+                    <div key={index} className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--pixel-orange)]/20 rounded-lg hover:border-[var(--pixel-orange)]/40 transition-colors duration-300">
+                      <div className="w-3 h-3 bg-[var(--pixel-orange)] mt-2 flex-shrink-0 rotate-45"></div>
+                      <span className="font-retro text-[var(--light-grey)] text-lg">{feature}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </section>
             )}
 
             {/* Challenges */}
             {project.challenges && project.challenges.length > 0 && (
-              <section className="mb-8">
-                <h2 className="font-pixel text-xl text-[var(--neon-green)] mb-4">CHALLENGES & SOLUTIONS</h2>
-                <ul className="space-y-3">
+              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-8 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-1 bg-[var(--hot-pink)]"></div>
+                  <h2 className="font-pixel text-2xl text-[var(--hot-pink)]">CHALLENGES & SOLUTIONS</h2>
+                </div>
+                <div className="space-y-4">
                   {project.challenges.map((challenge, index) => (
-                    <li key={index} className="border-l-2 border-[var(--hot-pink)] pl-4">
-                      <span className="font-retro text-[var(--light-grey)]">{challenge}</span>
-                    </li>
+                    <div key={index} className="border-l-4 border-[var(--hot-pink)] pl-6 py-4 bg-[var(--dark-navy)]/50 rounded-r-lg">
+                      <span className="font-retro text-[var(--light-grey)] text-lg leading-relaxed">{challenge}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
+              </section>
+            )}
+
+            {/* Default content when no detailed data is available */}
+            {(!project.fullDescription && (!project.features || project.features.length === 0) && (!project.challenges || project.challenges.length === 0)) && (
+              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-8 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-1 bg-[var(--neon-green)]"></div>
+                  <h2 className="font-pixel text-2xl text-[var(--neon-green)]">PROJECT DETAILS</h2>
+                </div>
+                <div className="space-y-6">
+                  <p className="font-retro text-lg text-[var(--light-grey)] leading-relaxed">
+                    This project showcases modern web development techniques and demonstrates expertise in {project.description?.toLowerCase()}.
+                  </p>
+                  <div className="grid gap-4">
+                    <div className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg">
+                      <div className="w-3 h-3 bg-[var(--neon-green)] mt-2 flex-shrink-0 rotate-45"></div>
+                      <span className="font-retro text-[var(--light-grey)] text-lg">Modern development practices and clean architecture</span>
+                    </div>
+                    <div className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg">
+                      <div className="w-3 h-3 bg-[var(--neon-green)] mt-2 flex-shrink-0 rotate-45"></div>
+                      <span className="font-retro text-[var(--light-grey)] text-lg">Responsive design and user experience optimization</span>
+                    </div>
+                    <div className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg">
+                      <div className="w-3 h-3 bg-[var(--neon-green)] mt-2 flex-shrink-0 rotate-45"></div>
+                      <span className="font-retro text-[var(--light-grey)] text-lg">Performance optimization and best practices</span>
+                    </div>
+                  </div>
+                </div>
               </section>
             )}
 
             {/* Additional Images */}
             {project.images && project.images.length > 1 && (
-              <section className="mb-8">
-                <h2 className="font-pixel text-xl text-[var(--neon-green)] mb-4">PROJECT GALLERY</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-8 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-1 bg-[var(--pixel-orange)]"></div>
+                  <h2 className="font-pixel text-2xl text-[var(--pixel-orange)]">PROJECT GALLERY</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {project.images.slice(1).map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`${project.title} screenshot ${index + 2}`}
-                      className="w-full h-48 object-cover rounded border border-[var(--pixel-orange)]"
-                    />
+                    <div key={index} className="group relative">
+                      <img
+                        src={image}
+                        alt={`${project.title} screenshot ${index + 2}`}
+                        className="w-full h-48 object-cover rounded-lg border border-[var(--pixel-orange)] group-hover:border-[var(--neon-green)] transition-colors duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--dark-navy)]/50 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
                   ))}
                 </div>
               </section>
@@ -429,57 +494,106 @@ export default function ProjectDetail() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-8">
             {/* Technologies */}
             {project.technologies && project.technologies.length > 0 && (
-              <section className="mb-8 p-6 border border-[var(--neon-green)] bg-[var(--neon-green)]/5">
-                <h3 className="font-pixel text-lg text-[var(--neon-green)] mb-4 flex items-center gap-2">
-                  <Code className="w-4 h-4" />
-                  TECHNOLOGIES
-                </h3>
-                <div className="flex flex-wrap gap-2">
+              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-6 backdrop-blur-sm sticky top-32">
+                <div className="flex items-center gap-3 mb-6">
+                  <Code className="w-6 h-6 text-[var(--neon-green)]" />
+                  <h3 className="font-pixel text-xl text-[var(--neon-green)]">TECH STACK</h3>
+                </div>
+                <div className="space-y-3">
                   {project.technologies.map((tech, index) => (
-                    <Badge
+                    <div
                       key={index}
-                      className="font-retro text-xs bg-[var(--pixel-orange)]/20 text-[var(--pixel-orange)] border border-[var(--pixel-orange)]"
+                      className="bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg p-3 hover:border-[var(--neon-green)]/40 transition-all duration-300 transform hover:scale-105"
                     >
-                      {tech}
-                    </Badge>
+                      <span className="font-retro text-[var(--light-grey)] font-semibold">{tech}</span>
+                    </div>
                   ))}
                 </div>
               </section>
             )}
 
+            {/* Project Stats */}
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-6 h-6 bg-[var(--pixel-orange)] rounded-full flex items-center justify-center">
+                  <div className="w-3 h-3 bg-[var(--dark-navy)] rounded-full"></div>
+                </div>
+                <h3 className="font-pixel text-xl text-[var(--pixel-orange)]">PROJECT INFO</h3>
+              </div>
+              <div className="space-y-4">
+                {project.category && (
+                  <div className="flex justify-between items-center">
+                    <span className="font-retro text-[var(--light-grey)]">Category:</span>
+                    <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.category}</span>
+                  </div>
+                )}
+                {project.duration && (
+                  <div className="flex justify-between items-center">
+                    <span className="font-retro text-[var(--light-grey)]">Duration:</span>
+                    <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.duration}</span>
+                  </div>
+                )}
+                {project.team && (
+                  <div className="flex justify-between items-center">
+                    <span className="font-retro text-[var(--light-grey)]">Team:</span>
+                    <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.team}</span>
+                  </div>
+                )}
+                {project.status && (
+                  <div className="flex justify-between items-center">
+                    <span className="font-retro text-[var(--light-grey)]">Status:</span>
+                    <span 
+                      className="font-retro font-semibold uppercase"
+                      style={{ color: getStatusColor(project.status) }}
+                    >
+                      {project.status}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </section>
+
             {/* Quick Links */}
-            <section className="p-6 border border-[var(--hot-pink)] bg-[var(--hot-pink)]/5">
-              <h3 className="font-pixel text-lg text-[var(--hot-pink)] mb-4">PROJECT LINKS</h3>
-              <div className="space-y-3">
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <ExternalLink className="w-6 h-6 text-[var(--hot-pink)]" />
+                <h3 className="font-pixel text-xl text-[var(--hot-pink)]">PROJECT LINKS</h3>
+              </div>
+              <div className="space-y-4">
                 {project.liveUrl && project.liveUrl !== '#' && (
                   <Button 
                     onClick={() => window.open(project.liveUrl, '_blank')}
-                    className="w-full retro-button retro-button-outline-green"
+                    className="w-full font-pixel text-sm bg-[var(--neon-green)]/10 text-[var(--neon-green)] border-2 border-[var(--neon-green)] px-6 py-4 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
                   >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    VIEW LIVE
+                    <ExternalLink className="w-5 h-5 mr-3" />
+                    VIEW LIVE DEMO
                   </Button>
                 )}
                 {project.githubUrl && project.githubUrl !== '#' && (
                   <Button 
                     onClick={() => window.open(project.githubUrl, '_blank')}
-                    className="w-full font-pixel text-xs text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-4 py-2 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-colors duration-200"
+                    className="w-full font-pixel text-sm bg-[var(--hot-pink)]/10 text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-6 py-4 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
                   >
-                    <Github className="w-4 h-4 mr-2" />
+                    <Github className="w-5 h-5 mr-3" />
                     SOURCE CODE
                   </Button>
                 )}
                 {project.demoVideo && (
                   <Button 
                     onClick={() => window.open(project.demoVideo, '_blank')}
-                    className="w-full font-pixel text-xs text-[var(--neon-green)] border-2 border-[var(--neon-green)] px-4 py-2 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)] transition-colors duration-200"
+                    className="w-full font-pixel text-sm bg-[var(--pixel-orange)]/10 text-[var(--pixel-orange)] border-2 border-[var(--pixel-orange)] px-6 py-4 hover:bg-[var(--pixel-orange)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
                   >
-                    <Play className="w-4 h-4 mr-2" />
+                    <Play className="w-5 h-5 mr-3" />
                     DEMO VIDEO
                   </Button>
+                )}
+                {(!project.liveUrl || project.liveUrl === '#') && (!project.githubUrl || project.githubUrl === '#') && !project.demoVideo && (
+                  <div className="text-center p-4 border border-[var(--hot-pink)]/20 rounded-lg">
+                    <span className="font-retro text-[var(--light-grey)] text-sm">Links will be available soon</span>
+                  </div>
                 )}
               </div>
             </section>
