@@ -16,19 +16,13 @@ export default function NotFound() {
       currentIndex = (currentIndex + 1) % glitchVariations.length;
     }, 200);
 
-    const resetTimer = setTimeout(() => {
-      clearInterval(interval);
-      setGlitchText("404");
-    }, 2000);
-
     return () => {
       clearInterval(interval);
-      clearTimeout(resetTimer);
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--dark-navy)] text-white relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--dark-navy)] text-white relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-20 left-10 w-2 h-2 bg-[var(--neon-green)] animate-pulse"></div>
@@ -45,11 +39,11 @@ export default function NotFound() {
       </div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
-        <div className="text-center max-w-2xl mx-auto">
+        <div className="text-center w-full mx-auto">
           
           {/* Glitch Effect 404 */}
           <div className="mb-8">
-            <h1 className="font-pixel text-8xl md:text-9xl text-[var(--neon-green)] mb-4 relative">
+            <h1 className="font-pixel w-full block text-[var(--neon-green)] mb-4 relative md:text-[10rem]" style={{ fontSize: 'min(18vw, 5.5rem)' }}>
               <span className="relative inline-block">
                 {glitchText}
                 <span className="absolute inset-0 text-[var(--hot-pink)] animate-pulse opacity-70 -translate-x-1 translate-y-1">
@@ -105,34 +99,6 @@ export default function NotFound() {
               GO BACK
             </Button>
           </div>
-
-          {/* Additional Navigation */}
-          <div className="mt-12 pt-8 border-t border-[var(--neon-green)]/20">
-            <p className="font-retro text-sm text-[var(--light-grey)] mb-4">
-              Or explore these sections:
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <button
-                onClick={() => navigate('/#portfolio')}
-                className="font-retro text-sm text-[var(--hot-pink)] hover:text-[var(--neon-green)] transition-colors duration-200"
-              >
-                → Portfolio
-              </button>
-              <button
-                onClick={() => navigate('/#skills')}
-                className="font-retro text-sm text-[var(--hot-pink)] hover:text-[var(--neon-green)] transition-colors duration-200"
-              >
-                → Skills
-              </button>
-              <button
-                onClick={() => navigate('/#contact')}
-                className="font-retro text-sm text-[var(--hot-pink)] hover:text-[var(--neon-green)] transition-colors duration-200"
-              >
-                → Contact
-              </button>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>

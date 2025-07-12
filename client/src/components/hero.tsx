@@ -34,9 +34,9 @@ export default function Hero() {
               >
                 VIEW PORTFOLIO
               </button>
-              <button className="retro-button retro-button-outline-pink glitch-hover">
+              <a href="/404-test" className="retro-button retro-button-outline-pink glitch-hover">
                 DOWNLOAD CV
-              </button>
+              </a>
             </div>
           </div>
           <div className="relative">

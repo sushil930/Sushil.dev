@@ -1,14 +1,44 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, insertProjectSchema, insertRatingSchema } from "@shared/schema";
+import { Contact, Project, Rating } from "@shared/schema";
 import { z } from "zod";
 
-export async function registerRoutes(app: Express): Promise<Server> {
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  message: z.string().min(1, "Message is required"),
+});
+
+const projectSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  image: z.string().url("Invalid image URL"),
+  liveUrl: z.string().url("Invalid live URL").optional().or(z.literal('')), // Allow empty string for optional URL
+  githubUrl: z.string().url("Invalid GitHub URL").optional().or(z.literal('')), // Allow empty string for optional URL
+  codeUrl: z.string().url("Invalid code URL").optional().or(z.literal('')), // Allow empty string for optional URL
+  fullDescription: z.string().optional().or(z.literal('')), // Allow empty string for optional description
+  technologies: z.array(z.string()).optional(),
+  features: z.array(z.string()).optional(),
+  challenges: z.array(z.string()).optional(),
+  images: z.array(z.string().url("Invalid image URL")).optional(),
+  demoVideo: z.string().url("Invalid demo video URL").optional().or(z.literal('')), // Allow empty string for optional URL
+  category: z.string().optional().or(z.literal('')), // Allow empty string for optional category
+  duration: z.string().optional().or(z.literal('')), // Allow empty string for optional duration
+  team: z.string().optional().or(z.literal('')), // Allow empty string for optional team
+  status: z.string().optional().or(z.literal('')), // Allow empty string for optional status
+});
+
+const ratingSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+});
+
+
+export async function registerRoutes(app: Express): Promise<Express> {
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
-      const validatedData = insertContactSchema.parse(req.body);
+      const validatedData = contactSchema.parse(req.body);
       const contact = await storage.createContact(validatedData);
       
       res.json({ 
@@ -64,13 +94,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get project by ID
   app.get("/api/projects/:id", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Invalid project ID" 
-        });
-      }
+      const id = req.params.id;
+
 
       const project = await storage.getProject(id);
       if (!project) {
@@ -93,13 +118,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create project
   app.post("/api/projects", async (req, res) => {
     try {
-      const validatedData = insertProjectSchema.parse(req.body);
+      const validatedData = projectSchema.parse(req.body);
       const project = await storage.createProject(validatedData);
       
       res.json({ 
         success: true, 
         message: "Project created successfully!",
-        project 
+        id: project.id 
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -118,62 +143,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Rating routes
+  // Create rating
+  app.post("/api/ratings", async (req, res) => {
+    try {
+      const validatedData = ratingSchema.parse(req.body);
+      
+      const ipAddress = req.ip;
+      if (!ipAddress) {
+        return res.status(500).json({ success: false, message: "Could not determine IP address" });
+      }
+
+      const hasRated = await storage.hasUserRated(ipAddress);
+      if (hasRated) {
+        return res.status(403).json({ success: false, message: "You have already rated in the last 24 hours." });
+      }
+
+      const rating = await storage.createRating({ ...validatedData, ipAddress });
+
+      res.json({
+        success: true,
+        message: "Rating submitted successfully!",
+        id: rating.id,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ success: false, message: "Invalid rating data", errors: error.errors });
+      }
+      console.error("Rating submission error:", error);
+      res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  });
+
+  // Get rating stats
   app.get("/api/ratings/stats", async (req, res) => {
     try {
       const stats = await storage.getRatingStats();
       res.json(stats);
     } catch (error) {
       console.error("Error fetching rating stats:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Internal server error" 
-      });
+      res.status(500).json({ success: false, message: "Internal server error" });
     }
   });
 
-  app.post("/api/ratings", async (req, res) => {
-    try {
-      const ipAddress = req.ip || req.connection.remoteAddress || 'unknown';
-      
-      // Check if user has already rated
-      const hasRated = await storage.hasUserRated(ipAddress);
-      if (hasRated) {
-        return res.status(400).json({
-          success: false,
-          message: "You have already rated this portfolio"
-        });
-      }
-
-      const validatedData = insertRatingSchema.parse({
-        ...req.body,
-        ipAddress
-      });
-      
-      const rating = await storage.createRating(validatedData);
-      
-      res.json({ 
-        success: true, 
-        message: "Thank you for your rating!",
-        rating 
-      });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Invalid rating data",
-          errors: error.errors 
-        });
-      }
-      
-      console.error("Rating creation error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Internal server error" 
-      });
-    }
-  });
-
-  const httpServer = createServer(app);
-  return httpServer;
+  return app;
 }

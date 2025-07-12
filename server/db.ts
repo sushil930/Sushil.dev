@@ -1,15 +1,20 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
-import * as schema from "@shared/schema";
+import { initializeApp, getApps } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import { cert } from 'firebase-admin/app';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 
-neonConfig.webSocketConstructor = ws;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
+// Path to your service account key file
+const serviceAccountPath = path.resolve(__dirname, 'pixelDev-serviceaccountkey.json');
+
+// Initialize Firebase Admin SDK
+if (!getApps().length) {
+  initializeApp({
+    credential: cert(serviceAccountPath)
+  });
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle({ client: pool, schema });
+export const db = getFirestore();

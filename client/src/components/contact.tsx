@@ -27,29 +27,20 @@ export default function Contact() {
     },
   });
 
-  const contactMutation = useMutation({
-    mutationFn: async (data: ContactFormData) => {
-      const response = await apiRequest("POST", "/api/contact", data);
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Message sent successfully!",
-        description: "I'll get back to you as soon as possible.",
-      });
-      form.reset();
-    },
-    onError: (error) => {
-      toast({
-        title: "Error sending message",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    },
-  });
-
   const onSubmit = (data: ContactFormData) => {
-    contactMutation.mutate(data);
+    const recipientEmail = "sushilpatel5113@gmail.com"; // Your email address
+    const subject = `Message from ${data.name} via your portfolio`;
+    const body = `Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`;
+
+    const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    window.open(mailtoLink, '_blank');
+
+    toast({
+      title: "Opening Gmail!",
+      description: "Please send your message from your email client.",
+    });
+    form.reset();
   };
 
   return (
@@ -189,10 +180,9 @@ export default function Contact() {
                 />
                 <Button
                   type="submit"
-                  disabled={contactMutation.isPending}
                   className="retro-button retro-button-green w-full glitch-hover"
                 >
-                  {contactMutation.isPending ? "SENDING..." : "SEND MESSAGE"}
+                  OPEN GMAIL
                 </Button>
               </form>
             </Form>

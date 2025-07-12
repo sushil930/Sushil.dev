@@ -1,24 +1,22 @@
 import { Skill, Achievement } from "@/lib/types";
 
 const frontendSkills: Skill[] = [
-  { name: "React", level: 95 },
-  { name: "Vue.js", level: 90 },
-  { name: "JavaScript", level: 92 },
-  { name: "TypeScript", level: 85 },
+  { name: "React", level: 95, icon: "/pixel-icons/pixel-react.png" },
+  { name: "JavaScript", level: 92, icon: "/pixel-icons/pixel-javascript.png" },
+  { name: "TypeScript", level: 85, icon: "/pixel-icons/pixel-typescript.png" },
+  { name: "Tailwind CSS", level: 88, icon: "/pixel-icons/pixel-tailwind.png" },
 ];
 
 const backendSkills: Skill[] = [
-  { name: "Node.js", level: 88 },
-  { name: "Express.js", level: 85 },
-  { name: "MongoDB", level: 80 },
-  { name: "PostgreSQL", level: 78 },
+  { name: "Node.js", level: 88, icon: "/pixel-icons/pixel-nodejs.png" },
+  { name: "MongoDB", level: 80, icon: "/pixel-icons/pixel-mongodb.png" },
+  { name: "PostgreSQL", level: 78, icon: "/pixel-icons/pixel-postgresql.png" },
+  { name: "Firebase", level: 85, icon: "/pixel-icons/pixel-firebase.png" },
+  { name: "Supabase", level: 80, icon: "/pixel-icons/pixel-supabase.png" },
 ];
 
 const toolsSkills: Skill[] = [
-  { name: "Git", level: 95 },
-  { name: "Docker", level: 82 },
-  { name: "AWS", level: 75 },
-  { name: "CI/CD", level: 80 },
+  { name: "Git", level: 95, icon: "/pixel-icons/pixel-git.png" },
 ];
 
 const achievements: Achievement[] = [
@@ -85,10 +83,22 @@ export default function Skills() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <SkillCategory title="FRONTEND" skills={frontendSkills} borderColor="neon-green" />
-          <SkillCategory title="BACKEND" skills={backendSkills} borderColor="hot-pink" />
-          <SkillCategory title="TOOLS & DEVOPS" skills={toolsSkills} borderColor="pixel-orange" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          {[
+            ...frontendSkills,
+            ...backendSkills,
+            ...toolsSkills,
+          ].map((skill) => (
+            <div
+              key={skill.name}
+              className="bg-[var(--dark-navy)] p-4 rounded-lg border-2 border-[var(--pixel-orange)] text-center flex flex-col items-center justify-center"
+            >
+              {skill.icon && (
+                <img src={skill.icon} alt={skill.name} className="max-w-full h-auto mb-2" style={{ maxHeight: '48px' }} />
+              )}
+              <span className="font-retro text-sm text-[var(--light-grey)]">{skill.name}</span>
+            </div>
+          ))}
         </div>
 
         <div className="mt-16">

@@ -24,6 +24,7 @@ export interface ProjectCard {
 export interface Skill {
   name: string;
   level: number;
+  icon?: string; // Optional icon path for display
 }
 
 export interface Achievement {

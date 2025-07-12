@@ -24,10 +24,7 @@ export default function Footer() {
   // Submit rating mutation
   const submitRatingMutation = useMutation({
     mutationFn: async (rating: number) => {
-      return apiRequest('/api/ratings', {
-        method: 'POST',
-        body: { rating }
-      });
+      return apiRequest('POST', '/api/ratings', { rating });
     },
     onSuccess: () => {
       toast({
@@ -87,7 +84,7 @@ export default function Footer() {
           {/* Copyright */}
           <div className="text-center md:text-left">
             <div className="font-pixel text-sm text-[var(--neon-green)] mb-2">
-              ALEX.DEV © 2025
+              SUSHIL.DEV © 2025
             </div>
             <div className="font-retro text-xs text-[var(--light-grey)]">
               Built with passion and pixels

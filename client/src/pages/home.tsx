@@ -9,10 +9,12 @@ import AnimatedBackground from "@/components/animated-background";
 import FloatingCodeSymbols from "@/components/floating-code-symbols";
 import RetroParticles from "@/components/retro-particles";
 import SnakeGame from "@/components/snake-game";
+import VintageOverlay from "@/components/vintage-overlay";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--dark-navy)] text-[var(--light-grey)] font-retro overflow-x-hidden relative">
+      <VintageOverlay />
       <AnimatedBackground />
       <RetroParticles />
       <FloatingCodeSymbols />
