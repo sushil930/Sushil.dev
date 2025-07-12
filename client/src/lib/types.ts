@@ -8,6 +8,17 @@ export interface ProjectCard {
   liveUrl?: string;
   githubUrl?: string;
   codeUrl?: string; // Keeping this for backward compatibility
+  // Enhanced details for project page
+  fullDescription?: string;
+  technologies?: string[];
+  features?: string[];
+  challenges?: string[];
+  images?: string[];
+  demoVideo?: string;
+  category?: string;
+  duration?: string;
+  team?: string;
+  status?: 'completed' | 'in-progress' | 'planning';
 }
 
 export interface Skill {

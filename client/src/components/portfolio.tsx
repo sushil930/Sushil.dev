@@ -90,15 +90,20 @@ export default function Portfolio() {
             {projects.map((project) => (
               <div 
                 key={`static-${project.id}`} 
-                className="project-card cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="project-card cursor-pointer hover:scale-105 transition-all duration-300 group relative border-2 border-transparent hover:border-[var(--neon-green)] p-4 rounded-lg"
                 onClick={() => handleProjectClick(project.id)}
               >
-                <div className="mb-4">
+                <div className="mb-4 relative overflow-hidden">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-48 object-cover rounded border-2 border-[var(--pixel-orange)]"
+                    className="w-full h-48 object-cover rounded border-2 border-[var(--pixel-orange)] group-hover:border-[var(--neon-green)] transition-colors duration-300"
                   />
+                  <div className="absolute inset-0 bg-[var(--neon-green)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded">
+                    <span className="font-pixel text-[var(--neon-green)] text-sm bg-[var(--dark-navy)]/80 px-4 py-2 rounded border border-[var(--neon-green)]">
+                      CLICK TO VIEW DETAILS
+                    </span>
+                  </div>
                 </div>
                 <h3 className="font-pixel text-sm text-[var(--pixel-orange)] mb-2">
                   {project.title}
