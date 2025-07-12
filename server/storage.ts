@@ -1,4 +1,6 @@
-import { users, type User, type InsertUser, type Contact, type InsertContact, type Project, type InsertProject } from "@shared/schema";
+import { users, contacts, projects, type User, type InsertUser, type Contact, type InsertContact, type Project, type InsertProject } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -68,7 +70,21 @@ export class MemStorage implements IStorage {
     const project: Project = { 
       ...insertProject, 
       id, 
-      createdAt: new Date() 
+      createdAt: new Date(),
+      // Ensure all fields have proper null values instead of undefined
+      liveUrl: insertProject.liveUrl || null,
+      githubUrl: insertProject.githubUrl || null,
+      codeUrl: insertProject.codeUrl || null,
+      fullDescription: insertProject.fullDescription || null,
+      technologies: insertProject.technologies || null,
+      features: insertProject.features || null,
+      challenges: insertProject.challenges || null,
+      images: insertProject.images || null,
+      demoVideo: insertProject.demoVideo || null,
+      category: insertProject.category || null,
+      duration: insertProject.duration || null,
+      team: insertProject.team || null,
+      status: insertProject.status || null,
     };
     this.projects.set(id, project);
     return project;
