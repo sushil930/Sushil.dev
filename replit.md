@@ -17,10 +17,10 @@ This is a modern portfolio website built with React and Express.js, featuring a 
 
 ### Backend Architecture
 - **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: PostgreSQL with Neon Database (cloud-hosted) using Drizzle ORM
 - **Schema Validation**: Zod for runtime type checking
 - **Session Management**: Built-in session handling (connect-pg-simple for PostgreSQL sessions)
-- **API Design**: RESTful API structure
+- **API Design**: RESTful API structure with project management endpoints
 
 ### Development Environment
 - **Runtime**: Node.js with ES modules
@@ -40,14 +40,17 @@ This is a modern portfolio website built with React and Express.js, featuring a 
 
 ### Backend Components
 1. **Contact API**: Handles form submissions and stores contact data
-2. **Storage Layer**: Abstracted storage interface with in-memory implementation
-3. **Route Registration**: Centralized route management
-4. **Error Handling**: Global error handling middleware
-5. **Static File Serving**: Serves built frontend assets in production
+2. **Project API**: Full CRUD operations for project management
+3. **Storage Layer**: Abstracted storage interface with PostgreSQL database implementation
+4. **Database Connection**: Neon Database integration with Drizzle ORM
+5. **Route Registration**: Centralized route management
+6. **Error Handling**: Global error handling middleware
+7. **Static File Serving**: Serves built frontend assets in production
 
 ### Database Schema
 - **Users Table**: Basic user authentication structure (id, username, password)
 - **Contacts Table**: Contact form submissions (id, name, email, message, created_at)
+- **Projects Table**: Comprehensive project data (id, title, description, image, urls, full_description, technologies, features, challenges, images, demo_video, category, duration, team, status, created_at)
 
 ## Data Flow
 
@@ -100,6 +103,11 @@ This is a modern portfolio website built with React and Express.js, featuring a 
 
 ```
 Changelog:
+- July 12, 2025. Integrated PostgreSQL database with Neon Database hosting
+- July 12, 2025. Replaced in-memory storage with database storage using Drizzle ORM
+- July 12, 2025. Added comprehensive project detail pages with routing system
+- July 12, 2025. Enhanced project cards with hover effects and click navigation
+- July 12, 2025. Created full project management API with database persistence
 - July 08, 2025. Performance optimization - reduced particles and animation intervals for smooth experience
 - July 08, 2025. Added detailed project pages with navigation from portfolio items
 - July 08, 2025. Made portfolio cards clickable with hover effects and project routing
