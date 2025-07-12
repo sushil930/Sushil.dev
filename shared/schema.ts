@@ -37,6 +37,13 @@ export const projects = pgTable("projects", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const ratings = pgTable("ratings", {
+  id: serial("id").primaryKey(),
+  rating: integer("rating").notNull(),
+  ipAddress: text("ip_address").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -67,9 +74,16 @@ export const insertProjectSchema = createInsertSchema(projects).pick({
   status: true,
 });
 
+export const insertRatingSchema = createInsertSchema(ratings).pick({
+  rating: true,
+  ipAddress: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertProject = z.infer<typeof insertProjectSchema>;
 export type Project = typeof projects.$inferSelect;
+export type InsertRating = z.infer<typeof insertRatingSchema>;
+export type Rating = typeof ratings.$inferSelect;

@@ -33,6 +33,7 @@
   --light-grey: hsl(0, 0%, 92%);
   --hot-pink: hsl(320, 100%, 50%);
   --darker-blue: hsl(230, 47%, 16%);
+  --charcoal-grey: hsl(220, 13%, 18%);
 }
 
 .dark {

@@ -1,6 +1,6 @@
-import { users, contacts, projects, type User, type InsertUser, type Contact, type InsertContact, type Project, type InsertProject } from "@shared/schema";
+import { users, contacts, projects, ratings, type User, type InsertUser, type Contact, type InsertContact, type Project, type InsertProject, type Rating, type InsertRating } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, avg, count } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -14,6 +14,9 @@ export interface IStorage {
   createProject(project: InsertProject): Promise<Project>;
   getAllProjects(): Promise<Project[]>;
   getProject(id: number): Promise<Project | undefined>;
+  createRating(rating: InsertRating): Promise<Rating>;
+  getRatingStats(): Promise<{ totalRatings: number; averageRating: number }>;
+  hasUserRated(ipAddress: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -146,6 +149,38 @@ export class DatabaseStorage implements IStorage {
   async getProject(id: number): Promise<Project | undefined> {
     const [project] = await db.select().from(projects).where(eq(projects.id, id));
     return project || undefined;
+  }
+
+  async createRating(insertRating: InsertRating): Promise<Rating> {
+    const [rating] = await db
+      .insert(ratings)
+      .values(insertRating)
+      .returning();
+    return rating;
+  }
+
+  async getRatingStats(): Promise<{ totalRatings: number; averageRating: number }> {
+    const [stats] = await db
+      .select({
+        totalRatings: count(ratings.id),
+        averageRating: avg(ratings.rating)
+      })
+      .from(ratings);
+    
+    return {
+      totalRatings: Number(stats.totalRatings) || 0,
+      averageRating: Number(stats.averageRating) || 0
+    };
+  }
+
+  async hasUserRated(ipAddress: string): Promise<boolean> {
+    const [existing] = await db
+      .select()
+      .from(ratings)
+      .where(eq(ratings.ipAddress, ipAddress))
+      .limit(1);
+    
+    return !!existing;
   }
 }
 

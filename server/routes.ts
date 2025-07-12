@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, insertProjectSchema } from "@shared/schema";
+import { insertContactSchema, insertProjectSchema, insertRatingSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -118,7 +118,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Rating routes
+  app.get("/api/ratings/stats", async (req, res) => {
+    try {
+      const stats = await storage.getRatingStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching rating stats:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Internal server error" 
+      });
+    }
+  });
 
+  app.post("/api/ratings", async (req, res) => {
+    try {
+      const ipAddress = req.ip || req.connection.remoteAddress || 'unknown';
+      
+      // Check if user has already rated
+      const hasRated = await storage.hasUserRated(ipAddress);
+      if (hasRated) {
+        return res.status(400).json({
+          success: false,
+          message: "You have already rated this portfolio"
+        });
+      }
+
+      const validatedData = insertRatingSchema.parse({
+        ...req.body,
+        ipAddress
+      });
+      
+      const rating = await storage.createRating(validatedData);
+      
+      res.json({ 
+        success: true, 
+        message: "Thank you for your rating!",
+        rating 
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Invalid rating data",
+          errors: error.errors 
+        });
+      }
+      
+      console.error("Rating creation error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Internal server error" 
+      });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;
