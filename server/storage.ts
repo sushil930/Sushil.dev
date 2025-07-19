@@ -13,7 +13,9 @@ export interface IStorage {
   getAllContacts(): Promise<Contact[]>;
   createProject(project: Omit<Project, 'id' | 'createdAt'>): Promise<Project>;
   getAllProjects(): Promise<Project[]>;
-  getProject(id: string): Promise<Project | undefined>;
+    getProject(id: string): Promise<Project | undefined>;
+    deleteProject(id: string): Promise<void>;
+  updateProject(id: string, projectData: Partial<Project>): Promise<Project>;
   createRating(rating: Omit<Rating, 'id' | 'createdAt'>): Promise<Rating>;
   getRatingStats(): Promise<{ totalRatings: number; averageRating: number }>;
   hasUserRated(ipAddress: string): Promise<boolean>;
@@ -75,6 +77,20 @@ export class FirestoreStorage implements IStorage {
   async getProject(id: string): Promise<Project | undefined> {
     const doc = await this.projectsCollection.doc(id).get();
     return doc.exists ? { id: doc.id, ...doc.data() as Omit<Project, 'id'>, createdAt: (doc.data()?.createdAt as any)?.toDate() || new Date() } : undefined;
+  }
+
+    async deleteProject(id: string): Promise<void> {
+    await this.projectsCollection.doc(id).delete();
+  }
+
+  async updateProject(id: string, projectData: Partial<Project>): Promise<Project> {
+    const projectRef = this.projectsCollection.doc(id);
+    await projectRef.update(projectData);
+    const updatedDoc = await projectRef.get();
+    if (!updatedDoc.exists) {
+      throw new Error("Project not found after update.");
+    }
+    return { id: updatedDoc.id, ...updatedDoc.data() as Omit<Project, 'id'>, createdAt: (updatedDoc.data()?.createdAt as any)?.toDate() || new Date() };
   }
 
   async createRating(rating: Omit<Rating, 'id' | 'createdAt'>): Promise<Rating> {

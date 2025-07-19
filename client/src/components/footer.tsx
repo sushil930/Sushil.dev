@@ -3,6 +3,8 @@ import { Star } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "wouter"; // This line was already present in the original code
+
 import { apiRequest } from "@/lib/queryClient";
 
 interface RatingStats {
@@ -88,6 +90,8 @@ export default function Footer() {
             </div>
             <div className="font-retro text-xs text-[var(--light-grey)]">
               Built with passion and pixels
+              <br />
+              <Link href="/login" className="text-[var(--hot-pink)] hover:underline">Admin Login</Link>
             </div>
           </div>
 

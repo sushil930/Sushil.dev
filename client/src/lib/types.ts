@@ -19,6 +19,9 @@ export interface ProjectCard {
   duration?: string;
   team?: string;
   status?: 'completed' | 'in-progress' | 'planning';
+  // Git information
+  lastCommit?: string;
+  commitMessage?: string;
 }
 
 export interface Skill {

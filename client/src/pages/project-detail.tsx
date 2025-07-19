@@ -2,8 +2,9 @@ import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ExternalLink, Github, Calendar, Users, Tag, Code, Play } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Calendar, Users, Tag, Code, Play, GitBranch, Clock, Eye, Star } from "lucide-react";
 import { ProjectCard } from "@/lib/types";
+import { useState } from "react";
 
 // Static project data for fallback
 const detailedProjects: Record<number, ProjectCard> = {
@@ -24,20 +25,18 @@ const detailedProjects: Record<number, ProjectCard> = {
       "Order tracking and management",
       "Admin dashboard for product management"
     ],
-    challenges: [
-      "Implementing secure payment processing",
-      "Optimizing database queries for large product catalogs",
-      "Creating responsive design for all device types",
-      "Managing complex state with Redux"
-    ],
     images: [
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800"
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
+      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800"
     ],
     category: "Full-Stack Development",
     duration: "3 months",
     team: "Solo Project",
-    status: "completed"
+    status: "completed",
+    lastCommit: "2024-01-15T10:30:00Z",
+    commitMessage: "feat: add payment processing with Stripe integration"
   },
   2: {
     id: 2,
@@ -56,59 +55,77 @@ const detailedProjects: Record<number, ProjectCard> = {
       "Contact form with validation",
       "Cross-browser compatibility"
     ],
-    challenges: [
-      "Creating scalable pixel art for different screen sizes",
-      "Implementing smooth animations without performance issues",
-      "Maintaining retro aesthetic while ensuring accessibility",
-      "Balancing creativity with usability"
-    ],
     images: [
       "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
-      "https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800"
+      "https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800",
+      "https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=800"
     ],
     category: "Frontend Development",
     duration: "2 months",
     team: "Solo Project",
-    status: "completed"
+    status: "completed",
+    lastCommit: "2024-01-20T14:45:00Z",
+    commitMessage: "style: enhance retro animations and pixel effects"
   }
 };
 
 export default function ProjectDetail() {
   const params = useParams<{ id: string }>();
   const [, navigate] = useLocation();
+  const [selectedImage, setSelectedImage] = useState(0);
   
-  const projectId = params?.id ? parseInt(params.id) : null;
+    const projectId = params?.id;
   
   // Try to fetch project from API first
-  const { data: apiProject, isLoading } = useQuery<ProjectCard>({
+      const { data: apiProject, isLoading, isError, error } = useQuery<ProjectCard>({
     queryKey: ['/api/projects', projectId],
-    enabled: !!projectId,
+    queryFn: async () => {
+      if (!projectId) {
+        throw new Error('No project ID provided');
+      }
+      const response = await fetch(`/api/projects/${projectId}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Network response was not ok' }));
+        throw new Error(errorData.message);
+      }
+      return response.json();
+    },
+        enabled: !!projectId,
   });
   
   // Fallback to static project data if API doesn't have it
-  const staticProject = projectId ? detailedProjects[projectId] : null;
-  const project = apiProject || staticProject;
+      const project = apiProject || (projectId ? detailedProjects[Number(projectId)] : undefined);
 
-  if (isLoading) {
+  if (isError) {
     return (
-      <div className="min-h-screen bg-[var(--dark-navy)] flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="font-pixel text-2xl text-[var(--neon-green)] mb-4">LOADING PROJECT...</h1>
-          <div className="font-retro text-[var(--light-grey)]">Fetching project details...</div>
-        </div>
+      <div className="container mx-auto text-center py-40">
+        <h2 className="font-pixel text-3xl text-red-500 mb-4">ERROR LOADING PROJECT</h2>
+        <p className="font-retro text-lg text-gray-400">
+          Could not fetch project data. Please try again later.
+        </p>
+        <p className="font-mono text-sm text-red-400/70 mt-4 bg-black/30 p-4 rounded-lg inline-block">
+          {error?.message || 'An unknown error occurred.'}
+        </p>
       </div>
     );
   }
-
-  if (!project) {
+  
+    if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--dark-navy)] flex items-center justify-center">
+        <div className="text-[var(--neon-green)] font-pixel text-xl">LOADING PROJECT...</div>
+      </div>
+    );
+  }
+  
+    if (!project) {
     return (
       <div className="min-h-screen bg-[var(--dark-navy)] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="font-pixel text-2xl text-[var(--neon-green)] mb-4">PROJECT NOT FOUND</h1>
-          <p className="font-retro text-[var(--light-grey)] mb-8">The project you're looking for doesn't exist.</p>
+          <div className="text-[var(--hot-pink)] font-pixel text-2xl mb-4">PROJECT NOT FOUND</div>
           <Button 
             onClick={() => navigate('/')}
-            className="retro-button retro-button-outline-green"
+            className="font-pixel bg-[var(--neon-green)] text-[var(--dark-navy)] hover:bg-[var(--neon-green)]/80"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             BACK TO HOME
@@ -118,398 +135,268 @@ export default function ProjectDetail() {
     );
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'var(--neon-green)';
-      case 'in-progress': return 'var(--pixel-orange)';
-      case 'planning': return 'var(--hot-pink)';
-      default: return 'var(--light-grey)';
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getStatusColor = (status: string | undefined) => {
+    if (!status) return '#EAEAEA';
+    switch (status.toLowerCase()) {
+      case 'completed': return '#00FF41';
+      case 'in-progress': return '#FFD700';
+      case 'planning': return '#FF6B35';
+      default: return '#EAEAEA';
     }
   };
 
   return (
-    <div className="min-h-screen bg-[var(--dark-navy)] text-white relative">
-      {/* Animated background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-[var(--neon-green)] animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-2 h-2 bg-[var(--pixel-orange)] animate-pulse delay-500"></div>
-        <div className="absolute top-60 left-1/3 w-2 h-2 bg-[var(--hot-pink)] animate-pulse delay-1000"></div>
-        <div className="absolute bottom-40 right-1/4 w-2 h-2 bg-[var(--neon-green)] animate-pulse delay-1500"></div>
-      </div>
-
+    <div className="min-h-screen bg-[var(--dark-navy)] text-white">
       {/* Header */}
-      <div className="border-b-2 border-[var(--neon-green)] bg-[var(--dark-navy)]/95 backdrop-blur-sm sticky top-0 z-50 shadow-lg shadow-[var(--neon-green)]/20">
-        <div className="container mx-auto px-4 py-6 flex items-center justify-between">
-          <Button 
-            onClick={() => navigate('/')}
-            variant="ghost"
-            className="font-pixel text-[var(--neon-green)] hover:bg-[var(--neon-green)]/20 border border-transparent hover:border-[var(--neon-green)] transition-all duration-300"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            BACK TO HOME
-          </Button>
-          
-          <div className="flex gap-4">
-            {project.liveUrl && project.liveUrl !== '#' && (
-              <Button 
-                onClick={() => window.open(project.liveUrl, '_blank')}
-                className="font-pixel text-sm bg-[var(--neon-green)]/10 text-[var(--neon-green)] border-2 border-[var(--neon-green)] px-6 py-3 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
+      <div className="border-b border-[var(--neon-green)]/20 bg-[var(--charcoal-grey)]/20 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Button 
+              onClick={() => navigate('/')}
+              variant="ghost"
+              className="font-pixel text-[var(--neon-green)] hover:bg-[var(--neon-green)]/10"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              BACK TO PROJECTS
+            </Button>
+            <div className="flex items-center gap-4">
+              <Badge 
+                className="font-pixel text-xs px-3 py-1"
+                style={{ 
+                  backgroundColor: `${getStatusColor(project.status)}20`,
+                  color: getStatusColor(project.status),
+                  border: `1px solid ${getStatusColor(project.status)}`
+                }}
               >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                LIVE DEMO
-              </Button>
-            )}
-            {project.githubUrl && project.githubUrl !== '#' && (
-              <Button 
-                onClick={() => window.open(project.githubUrl, '_blank')}
-                className="font-pixel text-sm bg-[var(--hot-pink)]/10 text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-6 py-3 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
-              >
-                <Github className="w-4 h-4 mr-2" />
-                SOURCE CODE
-              </Button>
-            )}
+                {project.status?.toUpperCase()}
+              </Badge>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 relative z-10">
-        {/* Hero Section */}
-        <div className="mb-16">
-          <div className="mb-8">
-            <div className="mb-6">
-              <h1 className="font-pixel text-4xl md:text-5xl lg:text-6xl text-[var(--neon-green)] mb-6 text-center md:text-left leading-tight">
-                {project.title}
-              </h1>
-              <div className="w-24 h-1 bg-gradient-to-r from-[var(--neon-green)] to-[var(--pixel-orange)] mb-6"></div>
-            </div>
-            
-            <p className="font-retro text-xl md:text-2xl text-[var(--light-grey)] mb-8 leading-relaxed">
-              {project.description}
-            </p>
-            
-            {/* Project Meta */}
-            <div className="flex flex-wrap gap-6 mb-8">
-              {project.category && (
-                <div className="flex items-center gap-3 bg-[var(--pixel-orange)]/10 border border-[var(--pixel-orange)] rounded-lg px-4 py-2">
-                  <Tag className="w-5 h-5 text-[var(--pixel-orange)]" />
-                  <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.category}</span>
-                </div>
-              )}
-              {project.duration && (
-                <div className="flex items-center gap-3 bg-[var(--neon-green)]/10 border border-[var(--neon-green)] rounded-lg px-4 py-2">
-                  <Calendar className="w-5 h-5 text-[var(--neon-green)]" />
-                  <span className="font-retro text-[var(--neon-green)] font-semibold">{project.duration}</span>
-                </div>
-              )}
-              {project.team && (
-                <div className="flex items-center gap-3 bg-[var(--hot-pink)]/10 border border-[var(--hot-pink)] rounded-lg px-4 py-2">
-                  <Users className="w-5 h-5 text-[var(--hot-pink)]" />
-                  <span className="font-retro text-[var(--hot-pink)] font-semibold">{project.team}</span>
-                </div>
-              )}
-              {project.status && (
-                <div 
-                  style={{ 
-                    backgroundColor: `${getStatusColor(project.status)}20`,
-                    borderColor: getStatusColor(project.status),
-                  }}
-                  className="flex items-center gap-3 border rounded-lg px-4 py-2"
-                >
-                  <div 
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: getStatusColor(project.status) }}
-                  ></div>
-                  <span 
-                    className="font-pixel text-sm font-bold uppercase"
-                    style={{ color: getStatusColor(project.status) }}
-                  >
-                    {project.status}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Main Image */}
-          <div className="mb-12 relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-green)]/20 to-[var(--pixel-orange)]/20 rounded-lg blur-xl transform scale-105 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <img
-              src={project.image}
-              alt={project.title}
-              className="relative w-full h-64 md:h-96 lg:h-[500px] object-cover rounded-lg border-2 border-[var(--pixel-orange)] shadow-2xl shadow-[var(--pixel-orange)]/20 transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--dark-navy)]/50 to-transparent rounded-lg"></div>
-          </div>
+      <div className="container mx-auto px-6 py-8">
+        {/* Project Title */}
+        <div className="mb-8">
+          <h1 className="font-pixel text-7xl md:text-4xl text-[var(--neon-green)] mb-4 leading-tight">{project.title}</h1>
+          <p className="font-retro text-lg text-[var(--light-grey)] max-w-3xl">{project.description}</p>
         </div>
 
-        {/* Main Project Layout */}
-        <div className="space-y-16">
-          
-          {/* Live Preview Section */}
-          {project.liveUrl && project.liveUrl !== '#' && (
-            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-8 backdrop-blur-sm">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content - Left Column */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            {/* Live Preview Section */}
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-6 backdrop-blur-sm">
               <div className="flex items-center gap-3 mb-6">
-                <ExternalLink className="w-6 h-6 text-[var(--neon-green)]" />
+                <Eye className="w-6 h-6 text-[var(--neon-green)]" />
                 <h2 className="font-pixel text-2xl text-[var(--neon-green)]">LIVE PREVIEW</h2>
               </div>
-              <div className="relative group">
-                <div className="aspect-video bg-[var(--dark-navy)]/50 border-2 border-[var(--neon-green)]/30 rounded-lg overflow-hidden">
-                  <iframe
-                    src={project.liveUrl}
-                    className="w-full h-full"
-                    title={`${project.title} Live Preview`}
-                    loading="lazy"
-                  />
-                </div>
-                <div className="mt-4 text-center">
-                  <Button
+              
+              {project.liveUrl && project.liveUrl !== '#' ? (
+                <div className="space-y-4">
+                  <div className="aspect-video bg-[var(--dark-navy)] border border-[var(--neon-green)]/20 rounded-lg overflow-hidden">
+                    <iframe
+                      src={project.liveUrl}
+                      className="w-full h-full"
+                      title={`${project.title} Live Preview`}
+                      sandbox="allow-scripts allow-same-origin"
+                    />
+                  </div>
+                  <Button 
                     onClick={() => window.open(project.liveUrl, '_blank')}
-                    className="font-pixel text-sm bg-[var(--neon-green)]/10 text-[var(--neon-green)] border-2 border-[var(--neon-green)] px-6 py-3 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
+                    className="w-full font-pixel bg-[var(--neon-green)]/10 text-[var(--neon-green)] border-2 border-[var(--neon-green)] hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)]"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     OPEN IN NEW TAB
                   </Button>
                 </div>
+              ) : (
+                <div className="aspect-video bg-[var(--dark-navy)] border border-[var(--hot-pink)]/20 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <Play className="w-12 h-12 text-[var(--hot-pink)] mx-auto mb-4 opacity-50" />
+                    <p className="font-retro text-[var(--light-grey)]">Live preview coming soon</p>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            {/* Project Info Section */}
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <Code className="w-6 h-6 text-[var(--pixel-orange)]" />
+                <h2 className="font-pixel text-2xl text-[var(--pixel-orange)]">PROJECT INFO</h2>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-pixel text-lg text-[var(--neon-green)] mb-2">DESCRIPTION</h3>
+                  <p className="font-retro text-[var(--light-grey)] leading-relaxed">{project.fullDescription}</p>
+                </div>
+                
+                {project.features && (
+                  <div>
+                    <h3 className="font-pixel text-lg text-[var(--neon-green)] mb-2">KEY FEATURES</h3>
+                    <ul className="space-y-2">
+                      {project.features?.map((feature: string, index: number) => (
+                        <li key={index} className="font-retro text-[var(--light-grey)] flex items-start gap-2">
+                          <span className="text-[var(--pixel-orange)] mt-1">▸</span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[var(--pixel-orange)]/20">
+                  <div>
+                    <span className="font-pixel text-[var(--pixel-orange)] text-sm">CATEGORY</span>
+                    <p className="font-retro text-[var(--light-grey)]">{project.category}</p>
+                  </div>
+                  <div>
+                    <span className="font-pixel text-[var(--pixel-orange)] text-sm">DURATION</span>
+                    <p className="font-retro text-[var(--light-grey)]">{project.duration}</p>
+                  </div>
+                  <div>
+                    <span className="font-pixel text-[var(--pixel-orange)] text-sm">TEAM</span>
+                    <p className="font-retro text-[var(--light-grey)]">{project.team}</p>
+                  </div>
+                  <div>
+                    <span className="font-pixel text-[var(--pixel-orange)] text-sm">STATUS</span>
+                    <p className="font-retro font-semibold" style={{ color: getStatusColor(project.status) }}>
+                      {project.status?.toUpperCase()}
+                    </p>
+                  </div>
+                </div>
               </div>
             </section>
-          )}
 
-          {/* Tech Stack Section */}
-          {project.technologies && project.technologies.length > 0 && (
-            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-8 backdrop-blur-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <Code className="w-8 h-8 text-[var(--neon-green)]" />
-                <h2 className="font-pixel text-2xl text-[var(--neon-green)]">TECHNOLOGY STACK</h2>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {project.technologies.map((tech, index) => (
-                  <div
-                    key={index}
-                    className="bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg p-4 text-center hover:border-[var(--neon-green)]/40 transition-all duration-300 transform hover:scale-105"
-                  >
-                    <span className="font-retro text-[var(--light-grey)] font-semibold">{tech}</span>
+            {/* Gallery Section */}
+            {project.images && project.images.length > 0 && (
+              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-6 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <Star className="w-6 h-6 text-[var(--hot-pink)]" />
+                  <h2 className="font-pixel text-2xl text-[var(--hot-pink)]">GALLERY</h2>
+                </div>
+                
+                <div className="space-y-4">
+                  {/* Main Image */}
+                  <div className="aspect-video bg-[var(--dark-navy)] border border-[var(--hot-pink)]/20 rounded-lg overflow-hidden">
+                    <img
+                      src={project.images[selectedImage]}
+                      alt={`${project.title} Screenshot ${selectedImage + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
+                  
+                  {/* Thumbnail Navigation */}
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    {project.images?.map((image: string, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImage(index)}
+                        className={`flex-shrink-0 w-20 h-12 rounded border-2 overflow-hidden transition-all ${
+                          selectedImage === index 
+                            ? 'border-[var(--hot-pink)]' 
+                            : 'border-[var(--hot-pink)]/20 hover:border-[var(--hot-pink)]/50'
+                        }`}
+                      >
+                        <img
+                          src={image}
+                          alt={`Thumbnail ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )}
+          </div>
+
+          {/* Sidebar - Right Column */}
+          <div className="space-y-6">
+            
+            {/* Tools & Technologies */}
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <Tag className="w-6 h-6 text-[var(--neon-green)]" />
+                <h3 className="font-pixel text-xl text-[var(--neon-green)]">TECH STACK</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies?.map((tech: string, index: number) => (
+                  <Badge
+                    key={index}
+                    className="font-pixel text-xs px-3 py-1 bg-[var(--neon-green)]/10 text-[var(--neon-green)] border border-[var(--neon-green)]/30"
+                  >
+                    {tech}
+                  </Badge>
                 ))}
               </div>
             </section>
-          )}
 
-          {/* Tools Used Section */}
-          <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-8 backdrop-blur-sm">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 bg-[var(--pixel-orange)] rounded-full flex items-center justify-center">
-                <div className="w-4 h-4 bg-[var(--dark-navy)] rounded-full"></div>
+            {/* Project Links */}
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <ExternalLink className="w-6 h-6 text-[var(--hot-pink)]" />
+                <h3 className="font-pixel text-xl text-[var(--hot-pink)]">LINKS</h3>
               </div>
-              <h2 className="font-pixel text-2xl text-[var(--pixel-orange)]">TOOLS & PLATFORMS</h2>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[
-                "Visual Studio Code",
-                "Git & GitHub", 
-                "Figma Design",
-                "Chrome DevTools",
-                "Postman API",
-                "Database Tools"
-              ].map((tool, index) => (
-                <div
-                  key={index}
-                  className="bg-[var(--dark-navy)]/50 border border-[var(--pixel-orange)]/20 rounded-lg p-4 text-center hover:border-[var(--pixel-orange)]/40 transition-all duration-300 transform hover:scale-105"
-                >
-                  <span className="font-retro text-[var(--light-grey)] text-sm font-semibold">{tool}</span>
-                </div>
-              ))}
-            </div>
-          </section>
+              <div className="space-y-3">
+                {project.liveUrl && project.liveUrl !== '#' && (
+                  <Button 
+                    onClick={() => window.open(project.liveUrl, '_blank')}
+                    className="w-full font-pixel text-sm bg-[var(--neon-green)]/10 text-[var(--neon-green)] border border-[var(--neon-green)]/30 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)]"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    LIVE DEMO
+                  </Button>
+                )}
+                {project.githubUrl && project.githubUrl !== '#' && (
+                  <Button 
+                    onClick={() => window.open(project.githubUrl, '_blank')}
+                    className="w-full font-pixel text-sm bg-[var(--hot-pink)]/10 text-[var(--hot-pink)] border border-[var(--hot-pink)]/30 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)]"
+                  >
+                    <Github className="w-4 h-4 mr-2" />
+                    SOURCE CODE
+                  </Button>
+                )}
+              </div>
+            </section>
 
-          {/* Project Details Grid */}
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-12">
-              {/* Description */}
-              {project.fullDescription && (
-                <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-8 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-1 bg-[var(--neon-green)]"></div>
-                    <h2 className="font-pixel text-2xl text-[var(--neon-green)]">PROJECT OVERVIEW</h2>
-                  </div>
-                  <p className="font-retro text-lg text-[var(--light-grey)] leading-relaxed">
-                    {project.fullDescription}
-                  </p>
-                </section>
-              )}
-
-              {/* Features */}
-              {project.features && project.features.length > 0 && (
-                <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-8 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-1 bg-[var(--pixel-orange)]"></div>
-                    <h2 className="font-pixel text-2xl text-[var(--pixel-orange)]">KEY FEATURES</h2>
-                  </div>
-                  <div className="grid gap-4">
-                    {project.features.map((feature, index) => (
-                      <div key={index} className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--pixel-orange)]/20 rounded-lg hover:border-[var(--pixel-orange)]/40 transition-colors duration-300">
-                        <div className="w-3 h-3 bg-[var(--pixel-orange)] mt-2 flex-shrink-0 rotate-45"></div>
-                        <span className="font-retro text-[var(--light-grey)] text-lg">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Challenges */}
-              {project.challenges && project.challenges.length > 0 && (
-                <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-8 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-1 bg-[var(--hot-pink)]"></div>
-                    <h2 className="font-pixel text-2xl text-[var(--hot-pink)]">CHALLENGES & SOLUTIONS</h2>
-                  </div>
-                  <div className="space-y-4">
-                    {project.challenges.map((challenge, index) => (
-                      <div key={index} className="border-l-4 border-[var(--hot-pink)] pl-6 py-4 bg-[var(--dark-navy)]/50 rounded-r-lg">
-                        <span className="font-retro text-[var(--light-grey)] text-lg leading-relaxed">{challenge}</span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Default content when no detailed data is available */}
-              {(!project.fullDescription && (!project.features || project.features.length === 0) && (!project.challenges || project.challenges.length === 0)) && (
-                <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-8 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-1 bg-[var(--neon-green)]"></div>
-                    <h2 className="font-pixel text-2xl text-[var(--neon-green)]">PROJECT DETAILS</h2>
-                  </div>
-                  <div className="space-y-6">
-                    <p className="font-retro text-lg text-[var(--light-grey)] leading-relaxed">
-                      This project showcases modern web development techniques and demonstrates expertise in {project.description?.toLowerCase()}.
-                    </p>
-                    <div className="grid gap-4">
-                      <div className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg">
-                        <div className="w-3 h-3 bg-[var(--neon-green)] mt-2 flex-shrink-0 rotate-45"></div>
-                        <span className="font-retro text-[var(--light-grey)] text-lg">Modern development practices and clean architecture</span>
-                      </div>
-                      <div className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg">
-                        <div className="w-3 h-3 bg-[var(--neon-green)] mt-2 flex-shrink-0 rotate-45"></div>
-                        <span className="font-retro text-[var(--light-grey)] text-lg">Responsive design and user experience optimization</span>
-                      </div>
-                      <div className="flex items-start gap-4 p-4 bg-[var(--dark-navy)]/50 border border-[var(--neon-green)]/20 rounded-lg">
-                        <div className="w-3 h-3 bg-[var(--neon-green)] mt-2 flex-shrink-0 rotate-45"></div>
-                        <span className="font-retro text-[var(--light-grey)] text-lg">Performance optimization and best practices</span>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              )}
-
-              {/* Additional Images */}
-              {project.images && project.images.length > 1 && (
-                <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-8 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-1 bg-[var(--pixel-orange)]"></div>
-                    <h2 className="font-pixel text-2xl text-[var(--pixel-orange)]">PROJECT GALLERY</h2>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {project.images.slice(1).map((image, index) => (
-                      <div key={index} className="group relative">
-                        <img
-                          src={image}
-                          alt={`${project.title} screenshot ${index + 2}`}
-                          className="w-full h-48 object-cover rounded-lg border border-[var(--pixel-orange)] group-hover:border-[var(--neon-green)] transition-colors duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--dark-navy)]/50 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-            </div>
-
-            {/* Sidebar */}
-            <div className="lg:col-span-1 space-y-8">
-              {/* Project Stats */}
+            {/* Last Commit */}
+            {project.lastCommit && (
               <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-6 backdrop-blur-sm">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-6 h-6 bg-[var(--pixel-orange)] rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-[var(--dark-navy)] rounded-full"></div>
+                <div className="flex items-center gap-3 mb-4">
+                  <GitBranch className="w-6 h-6 text-[var(--pixel-orange)]" />
+                  <h3 className="font-pixel text-xl text-[var(--pixel-orange)]">LAST COMMIT</h3>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Clock className="w-4 h-4 text-[var(--pixel-orange)]" />
+                    <span className="font-retro text-[var(--light-grey)]">
+                      {formatDate(project.lastCommit)}
+                    </span>
                   </div>
-                  <h3 className="font-pixel text-xl text-[var(--pixel-orange)]">PROJECT INFO</h3>
-                </div>
-                <div className="space-y-4">
-                  {project.category && (
-                    <div className="flex justify-between items-center">
-                      <span className="font-retro text-[var(--light-grey)]">Category:</span>
-                      <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.category}</span>
-                    </div>
-                  )}
-                  {project.duration && (
-                    <div className="flex justify-between items-center">
-                      <span className="font-retro text-[var(--light-grey)]">Duration:</span>
-                      <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.duration}</span>
-                    </div>
-                  )}
-                  {project.team && (
-                    <div className="flex justify-between items-center">
-                      <span className="font-retro text-[var(--light-grey)]">Team:</span>
-                      <span className="font-retro text-[var(--pixel-orange)] font-semibold">{project.team}</span>
-                    </div>
-                  )}
-                  {project.status && (
-                    <div className="flex justify-between items-center">
-                      <span className="font-retro text-[var(--light-grey)]">Status:</span>
-                      <span 
-                        className="font-retro font-semibold uppercase"
-                        style={{ color: getStatusColor(project.status) }}
-                      >
-                        {project.status}
-                      </span>
+                  {project.commitMessage && (
+                    <div className="bg-[var(--dark-navy)]/50 border border-[var(--pixel-orange)]/20 rounded p-3">
+                      <p className="font-mono text-sm text-[var(--light-grey)]">
+                        {project.commitMessage}
+                      </p>
                     </div>
                   )}
                 </div>
               </section>
-
-              {/* Quick Links */}
-              <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-6 backdrop-blur-sm">
-                <div className="flex items-center gap-3 mb-6">
-                  <ExternalLink className="w-6 h-6 text-[var(--hot-pink)]" />
-                  <h3 className="font-pixel text-xl text-[var(--hot-pink)]">PROJECT LINKS</h3>
-                </div>
-                <div className="space-y-4">
-                  {project.liveUrl && project.liveUrl !== '#' && (
-                    <Button 
-                      onClick={() => window.open(project.liveUrl, '_blank')}
-                      className="w-full font-pixel text-sm bg-[var(--neon-green)]/10 text-[var(--neon-green)] border-2 border-[var(--neon-green)] px-6 py-4 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
-                    >
-                      <ExternalLink className="w-5 h-5 mr-3" />
-                      VIEW LIVE DEMO
-                    </Button>
-                  )}
-                  {project.githubUrl && project.githubUrl !== '#' && (
-                    <Button 
-                      onClick={() => window.open(project.githubUrl, '_blank')}
-                      className="w-full font-pixel text-sm bg-[var(--hot-pink)]/10 text-[var(--hot-pink)] border-2 border-[var(--hot-pink)] px-6 py-4 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
-                    >
-                      <Github className="w-5 h-5 mr-3" />
-                      SOURCE CODE
-                    </Button>
-                  )}
-                  {project.demoVideo && (
-                    <Button 
-                      onClick={() => window.open(project.demoVideo, '_blank')}
-                      className="w-full font-pixel text-sm bg-[var(--pixel-orange)]/10 text-[var(--pixel-orange)] border-2 border-[var(--pixel-orange)] px-6 py-4 hover:bg-[var(--pixel-orange)] hover:text-[var(--dark-navy)] transition-all duration-300 transform hover:scale-105"
-                    >
-                      <Play className="w-5 h-5 mr-3" />
-                      DEMO VIDEO
-                    </Button>
-                  )}
-                  {(!project.liveUrl || project.liveUrl === '#') && (!project.githubUrl || project.githubUrl === '#') && !project.demoVideo && (
-                    <div className="text-center p-4 border border-[var(--hot-pink)]/20 rounded-lg">
-                      <span className="font-retro text-[var(--light-grey)] text-sm">Links will be available soon</span>
-                    </div>
-                  )}
-                </div>
-              </section>
-            </div>
+            )}
           </div>
         </div>
       </div>

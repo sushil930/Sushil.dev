@@ -34,6 +34,16 @@ const ratingSchema = z.object({
 });
 
 
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin'; // IMPORTANT: Change this in production!
+
+// Authentication middleware
+const isAuthenticated = (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => {
+  if (req.session.isAuthenticated) {
+    return next();
+  }
+  res.status(401).json({ success: false, message: 'Unauthorized' });
+};
+
 export async function registerRoutes(app: Express): Promise<Express> {
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
@@ -115,8 +125,30 @@ export async function registerRoutes(app: Express): Promise<Express> {
     }
   });
 
-  // Create project
-  app.post("/api/projects", async (req, res) => {
+  // Login
+  app.post("/api/login", (req, res) => {
+    const { password } = req.body;
+    if (password === ADMIN_PASSWORD) {
+      req.session.isAuthenticated = true;
+      res.json({ success: true, message: 'Login successful' });
+    } else {
+      res.status(401).json({ success: false, message: 'Invalid password' });
+    }
+  });
+
+  // Logout
+  app.post("/api/logout", (req, res) => {
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Could not log out.' });
+      }
+      res.clearCookie('connect.sid'); // The default session cookie name
+      res.json({ success: true, message: 'Logout successful' });
+    });
+  });
+
+  // Create project (now protected)
+  app.post("/api/projects", isAuthenticated, async (req, res) => {
     try {
       const validatedData = projectSchema.parse(req.body);
       const project = await storage.createProject(validatedData);
@@ -143,6 +175,39 @@ export async function registerRoutes(app: Express): Promise<Express> {
     }
   });
 
+  // Delete project (protected)
+  app.delete("/api/projects/:id", isAuthenticated, async (req, res) => {
+    try {
+      const id = req.params.id;
+      await storage.deleteProject(id);
+      res.status(200).json({ success: true, message: "Project deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  });
+
+  // Update project (protected)
+  app.put("/api/projects/:id", isAuthenticated, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const validatedData = projectSchema.partial().safeParse(req.body);
+
+      if (!validatedData.success) {
+        return res.status(400).json({ error: 'Invalid project data.', details: validatedData.error.flatten() });
+      }
+
+      const updatedProject = await storage.updateProject(id, validatedData.data);
+      res.json(updatedProject);
+    } catch (error) {
+      console.error('Error updating project:', error);
+      if (error instanceof Error && error.message.includes('not found')) {
+        return res.status(404).json({ error: 'Project not found.' });
+      }
+      res.status(500).json({ error: 'Failed to update project.' });
+    }
+  });
+
   // Create rating
   app.post("/api/ratings", async (req, res) => {
     try {
@@ -155,7 +220,7 @@ export async function registerRoutes(app: Express): Promise<Express> {
 
       const hasRated = await storage.hasUserRated(ipAddress);
       if (hasRated) {
-        return res.status(403).json({ success: false, message: "You have already rated in the last 24 hours." });
+        return res.status(409).json({ success: false, message: "You have already rated in the last 24 hours." });
       }
 
       const rating = await storage.createRating({ ...validatedData, ipAddress });

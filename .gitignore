@@ -8,3 +8,13 @@ vite.config.ts.*
 pixelDev-serviceaccountkey.json
 server/pixelDev-serviceaccountkey.json
 client/pixelDev-serviceaccountkey.json
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Do not ignore .env.example files, which are meant to be checked in.
+!.env.example

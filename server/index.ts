@@ -1,11 +1,43 @@
+import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import session from 'express-session';
+import methodOverride from 'method-override';
+import cors from 'cors';
 
 const app = express();
+
+// CORS configuration
+const corsOptions = {
+  origin: 'http://localhost:5173', // Allow only the frontend to access
+  credentials: true, // Allow cookies to be sent
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: false }));
+
+// Augment express-session with a custom property
+declare module 'express-session' {
+  interface SessionData {
+    isAuthenticated?: boolean;
+  }
+}
+
+// Session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'super-secret-key-change-in-prod',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
 
 app.use((req, res, next) => {
   const start = Date.now();

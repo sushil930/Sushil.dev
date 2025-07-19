@@ -373,15 +373,15 @@
   100% { transform: scaleX(1) rotateY(360deg); }
 }
 
-/* Responsive font sizes */
-@media (max-width: 768px) {
-  .font-pixel {
-    font-size: 0.6rem;
-  }
+/* Responsive font sizes removed - using Tailwind responsive classes instead */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+    display: none;
 }
 
-@media (max-width: 480px) {
-  .font-pixel {
-    font-size: 0.5rem;
-  }
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
