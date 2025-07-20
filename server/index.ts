@@ -5,14 +5,28 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import session from 'express-session';
 import methodOverride from 'method-override';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 
 const app = express();
 
 // CORS configuration
-const corsOptions = {
-  origin: 'http://localhost:5173', // Allow only the frontend to access
-  credentials: true, // Allow cookies to be sent
+const allowedOrigins = [
+  'http://localhost:5173',       // Local development
+  'https://sushil-dev.vercel.app'  // Production
+];
+
+const corsOptions: CorsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
