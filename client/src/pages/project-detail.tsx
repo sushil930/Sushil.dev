@@ -167,7 +167,7 @@ export default function ProjectDetail() {
               className="font-pixel text-[var(--neon-green)] hover:bg-[var(--neon-green)]/10"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              BACK TO PROJECTS
+              PROJECTS
             </Button>
             <div className="flex items-center gap-4">
               <Badge 
@@ -366,24 +366,6 @@ export default function ProjectDetail() {
 
           {/* Sidebar - Right Column */}
           <div className="space-y-6 order-1 lg:order-2">
-            
-            {/* Tools & Technologies */}
-            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-6 backdrop-blur-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <Tag className="w-6 h-6 text-[var(--neon-green)]" />
-                <h3 className="font-pixel text-xl text-[var(--neon-green)]">TECH STACK</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {project.technologies?.map((tech: string, index: number) => (
-                  <Badge
-                    key={index}
-                    className="font-pixel text-xs px-3 py-1 bg-[var(--neon-green)]/10 text-[var(--neon-green)] border border-[var(--neon-green)]/30"
-                  >
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-            </section>
 
             {/* Project Links */}
             <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-6 backdrop-blur-sm">
