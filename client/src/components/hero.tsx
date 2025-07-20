@@ -10,19 +10,19 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="flex items-center justify-center relative scanline-overlay py-32">
-      <div className="container mx-auto p-11">
+    <section id="home" className="flex items-center justify-center relative scanline-overlay py-24 md:py-32">
+      <div className="container mx-auto px-6 md:px-11">
         <div className="grid lg:grid-cols-2 gap-12 items-center pt-20 lg:pt-0">
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             <div className="font-pixel text-[var(--neon-green)] text-base sm:text-sm md:text-xs mb-4 glow-text">
               PLAYER ONE
             </div>
-            <h1 className="font-pixel text-5xl sm:text-4xl md:text-3xl lg:text-4xl mb-6 leading-tight">
-              <span className="text-[var(--light-grey)]">FRONTEND</span><br />
-              <span className="text-[var(--pixel-orange)]">DEVELOPER</span><br />
+            <h1 className="font-pixel text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight">
+              <span className="text-[var(--light-grey)]">FRONTEND </span>
+              <span className="text-[var(--pixel-orange)]">DEVELOPER </span>
               <CountingLevel targetLevel={99} duration={8000} />
             </h1>
-            <div className="font-retro text-2xl sm:text-xl md:text-lg lg:text-xl mb-8 leading-relaxed">
+            <div className="font-retro text-lg md:text-xl mb-8 leading-relaxed">
               <p className="mb-4">
                 Hi, I'm Sushil - a passionate frontend developer who crafts pixel-perfect digital experiences.
               </p>

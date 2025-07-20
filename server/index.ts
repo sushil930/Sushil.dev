@@ -22,10 +22,12 @@ const corsOptions: CorsOptions = {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    if (allowedOrigins.indexOf(origin) !== -1 || (process.env.NODE_ENV !== 'production' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')))) {
+      return callback(null, true);
     }
+
+    const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+    return callback(new Error(msg), false);
     return callback(null, true);
   },
   credentials: true,
@@ -42,6 +44,9 @@ declare module 'express-session' {
     isAuthenticated?: boolean;
   }
 }
+
+// Trust the first proxy hop (e.g., Render's load balancer)
+app.set('trust proxy', 1);
 
 // Session middleware
 app.use(session({

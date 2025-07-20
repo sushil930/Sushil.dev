@@ -156,7 +156,7 @@ export default function ProjectDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--dark-navy)] text-white">
+    <div className="min-h-screen bg-[var(--dark-navy)] text-white pt-7">
       {/* Header */}
       <div className="border-b border-[var(--neon-green)]/20 bg-[var(--charcoal-grey)]/20 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
@@ -185,16 +185,16 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 md:px-6 py-12">
         {/* Project Title */}
         <div className="mb-8">
-          <h1 className="font-pixel text-7xl md:text-4xl text-[var(--neon-green)] mb-4 leading-tight">{project.title}</h1>
+          <h1 className="font-pixel text-4xl md:text-5xl lg:text-6xl text-[var(--neon-green)] mb-4 leading-tight">{project.title}</h1>
           <p className="font-retro text-lg text-[var(--light-grey)] max-w-3xl">{project.description}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           {/* Main Content - Left Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-8 order-2 lg:order-1">
             
             {/* Live Preview Section */}
             <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-6 backdrop-blur-sm">
@@ -202,7 +202,6 @@ export default function ProjectDetail() {
                 <Eye className="w-6 h-6 text-[var(--neon-green)]" />
                 <h2 className="font-pixel text-2xl text-[var(--neon-green)]">LIVE PREVIEW</h2>
               </div>
-              
               {project.liveUrl && project.liveUrl !== '#' ? (
                 <div className="space-y-4">
                   <div className="aspect-video bg-[var(--dark-navy)] border border-[var(--neon-green)]/20 rounded-lg overflow-hidden">
@@ -231,19 +230,17 @@ export default function ProjectDetail() {
               )}
             </section>
 
-            {/* Project Info Section */}
+            {/* Project Info Section (Description and Features) */}
             <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--pixel-orange)]/30 rounded-lg p-6 backdrop-blur-sm">
               <div className="flex items-center gap-3 mb-6">
                 <Code className="w-6 h-6 text-[var(--pixel-orange)]" />
                 <h2 className="font-pixel text-2xl text-[var(--pixel-orange)]">PROJECT INFO</h2>
               </div>
-              
               <div className="space-y-4">
                 <div>
                   <h3 className="font-pixel text-lg text-[var(--neon-green)] mb-2">DESCRIPTION</h3>
                   <p className="font-retro text-[var(--light-grey)] leading-relaxed">{project.fullDescription}</p>
                 </div>
-                
                 {project.features && (
                   <div>
                     <h3 className="font-pixel text-lg text-[var(--neon-green)] mb-2">KEY FEATURES</h3>
@@ -257,7 +254,6 @@ export default function ProjectDetail() {
                     </ul>
                   </div>
                 )}
-
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[var(--pixel-orange)]/20">
                   <div>
                     <span className="font-pixel text-[var(--pixel-orange)] text-sm">CATEGORY</span>
@@ -281,6 +277,52 @@ export default function ProjectDetail() {
               </div>
             </section>
 
+            {/* Tech Stack Section */}
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <Tag className="w-6 h-6 text-[var(--neon-green)]" />
+                <h3 className="font-pixel text-xl text-[var(--neon-green)]">TECH STACK</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies?.map((tech: string, index: number) => (
+                  <Badge
+                    key={index}
+                    className="font-pixel text-xs px-3 py-1 bg-[var(--neon-green)]/10 text-[var(--neon-green)] border border-[var(--neon-green)]/30"
+                  >
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+            </section>
+
+            {/* Project Links Section */}
+            <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-6 backdrop-blur-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <ExternalLink className="w-6 h-6 text-[var(--hot-pink)]" />
+                <h3 className="font-pixel text-xl text-[var(--hot-pink)]">LINKS</h3>
+              </div>
+              <div className="space-y-3">
+                {project.liveUrl && project.liveUrl !== '#' && (
+                  <Button 
+                    onClick={() => window.open(project.liveUrl, '_blank')}
+                    className="w-full font-pixel text-sm bg-[var(--neon-green)]/10 text-[var(--neon-green)] border border-[var(--neon-green)]/30 hover:bg-[var(--neon-green)] hover:text-[var(--dark-navy)]"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    LIVE DEMO
+                  </Button>
+                )}
+                {project.githubUrl && project.githubUrl !== '#' && (
+                  <Button 
+                    onClick={() => window.open(project.githubUrl, '_blank')}
+                    className="w-full font-pixel text-sm bg-[var(--hot-pink)]/10 text-[var(--hot-pink)] border border-[var(--hot-pink)]/30 hover:bg-[var(--hot-pink)] hover:text-[var(--dark-navy)]"
+                  >
+                    <Github className="w-4 h-4 mr-2" />
+                    SOURCE CODE
+                  </Button>
+                )}
+              </div>
+            </section>
+
             {/* Gallery Section */}
             {project.images && project.images.length > 0 && (
               <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--hot-pink)]/30 rounded-lg p-6 backdrop-blur-sm">
@@ -288,7 +330,6 @@ export default function ProjectDetail() {
                   <Star className="w-6 h-6 text-[var(--hot-pink)]" />
                   <h2 className="font-pixel text-2xl text-[var(--hot-pink)]">GALLERY</h2>
                 </div>
-                
                 <div className="space-y-4">
                   {/* Main Image */}
                   <div className="aspect-video bg-[var(--dark-navy)] border border-[var(--hot-pink)]/20 rounded-lg overflow-hidden">
@@ -298,7 +339,6 @@ export default function ProjectDetail() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  
                   {/* Thumbnail Navigation */}
                   <div className="flex gap-2 overflow-x-auto pb-2">
                     {project.images?.map((image: string, index: number) => (
@@ -325,7 +365,7 @@ export default function ProjectDetail() {
           </div>
 
           {/* Sidebar - Right Column */}
-          <div className="space-y-6">
+          <div className="space-y-6 order-1 lg:order-2">
             
             {/* Tools & Technologies */}
             <section className="bg-[var(--charcoal-grey)]/30 border border-[var(--neon-green)]/30 rounded-lg p-6 backdrop-blur-sm">
