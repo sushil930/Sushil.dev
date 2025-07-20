@@ -34,7 +34,7 @@ const ratingSchema = z.object({
 });
 
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin'; // IMPORTANT: Change this in production!
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Authentication middleware
 const isAuthenticated = (req: import("express").Request, res: import("express").Response, next: import("express").NextFunction) => {
@@ -128,6 +128,12 @@ export async function registerRoutes(app: Express): Promise<Express> {
   // Login
   app.post("/api/login", (req, res) => {
     const { password } = req.body;
+
+    // Debugging: Check if the environment variable is loaded.
+    console.log('ADMIN_PASSWORD variable exists:', !!process.env.ADMIN_PASSWORD);
+    console.log('ADMIN_PASSWORD length:', process.env.ADMIN_PASSWORD?.length || 0);
+    console.log('Received password length:', req.body.password?.length || 0);
+
     if (password === ADMIN_PASSWORD) {
       req.session.isAuthenticated = true;
       res.json({ success: true, message: 'Login successful' });
