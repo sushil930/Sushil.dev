@@ -3,6 +3,8 @@ import express, { type Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import path from 'path';
+import { fileURLToPath } from 'url';
 import session from 'express-session';
 import methodOverride from 'method-override';
 import cors, { CorsOptions } from 'cors';
@@ -98,10 +100,21 @@ app.use((req, res, next) => {
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
+  // In production, Express serves the built frontend assets
+  if (process.env.NODE_ENV === 'production') {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const clientBuildPath = path.join(__dirname, '../../client/dist');
+
+    app.use(express.static(clientBuildPath));
+
+    // For any other route, serve the index.html file to let React Router handle it
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    });
   } else {
-    serveStatic(app);
+    // In development, Vite handles the frontend
+    await setupVite(app, server);
   }
 
   // ALWAYS serve the app on port 5000
