@@ -13,8 +13,8 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:5173',       // Local development
-  'https://sushil-dev.vercel.app'  // Production
+  'http://localhost:5173',          // Local development
+  'https://sushil-dev.onrender.com' // Production placeholder - UPDATE THIS
 ];
 
 const corsOptions: CorsOptions = {
@@ -119,12 +119,9 @@ app.use((req, res, next) => {
 
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.
-  const port = 5000;
-  server.listen({
-    port,
-    host: "127.0.0.1",
-
-  }, () => {
-    log(`serving on port ${port}`);
+  // Render provides the port via an environment variable
+  const port = process.env.PORT || 5000;
+  server.listen(port, () => {
+    log(`Server is running on port ${port}`);
   });
 })();
