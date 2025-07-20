@@ -48,8 +48,8 @@ export default function SnakeGame() {
     if (dimensions.width === 0 || dimensions.height === 0) return;
 
     const initialSnake: SnakeSegment[] = [];
-    const startX = dimensions.width / 2;
-    const startY = dimensions.height / 2;
+    const startX = 100;
+    const startY = 100;
 
     for (let i = 0; i < snakeLength; i++) {
       initialSnake.push({

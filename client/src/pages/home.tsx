@@ -18,7 +18,9 @@ export default function Home() {
       <AnimatedBackground />
       <RetroParticles />
       <FloatingCodeSymbols />
-      <SnakeGame />
+      <div className="absolute top-4 left-4 z-0">
+        <SnakeGame />
+      </div>
       <ScanlineOverlay />
       <div className="relative z-10">
         <Navigation />
