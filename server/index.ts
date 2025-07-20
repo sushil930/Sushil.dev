@@ -102,9 +102,9 @@ app.use((req, res, next) => {
   // doesn't interfere with the other routes
   // In production, Express serves the built frontend assets
   if (process.env.NODE_ENV === 'production') {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const clientBuildPath = path.join(__dirname, '../../client/dist');
+    // Construct an absolute path to the client's build directory
+    // This is more robust for different deployment environments
+    const clientBuildPath = path.join(process.cwd(), 'client', 'dist');
 
     app.use(express.static(clientBuildPath));
 
