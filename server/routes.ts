@@ -88,6 +88,11 @@ export async function registerRoutes(app: Express): Promise<Express> {
   });
 
   // Get all projects
+    // Health check endpoint to keep the server awake
+  app.get("/api/healthcheck", (req, res) => {
+    res.status(200).json({ status: "ok" });
+  });
+
   app.get("/api/projects", async (req, res) => {
     try {
       const projects = await storage.getAllProjects();
