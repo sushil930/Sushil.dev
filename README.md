@@ -4,7 +4,7 @@
 
 A full-stack personal portfolio website built with React, TypeScript, and Express, showcasing my projects, skills, and a bit of my personality.
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://sushil-dev.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://sushil-dev-wzc6.onrender.com)
 
 ## 🚀 Features
 
