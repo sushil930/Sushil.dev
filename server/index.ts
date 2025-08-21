@@ -14,7 +14,7 @@ const app = express();
 // CORS configuration
 const allowedOrigins = [
   'http://localhost:5173',          // Local development
-  'https://sushil-dev.onrender.com' // Production placeholder - UPDATE THIS
+  'https://sushil-dev-wzc6.onrender.com' // Production placeholder - UPDATE THIS
 ];
 
 const corsOptions: CorsOptions = {
