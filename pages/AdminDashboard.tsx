@@ -32,6 +32,18 @@ import { uploadImageToCloudinary } from '../utils/cloudinary';
 import { Project } from '../types';
 import { SkillData } from '../utils/dataManager';
 
+// Theme Colors for Randomization
+const THEME_COLORS = [
+  { color: 'text-neon-green', barColor: 'to-neon-green' },
+  { color: 'text-pixel-orange', barColor: 'to-pixel-orange' },
+  { color: 'text-hot-pink', barColor: 'to-hot-pink' },
+  { color: 'text-cyan-400', barColor: 'to-cyan-400' },
+  { color: 'text-purple-400', barColor: 'to-purple-400' },
+  { color: 'text-yellow-400', barColor: 'to-yellow-400' },
+  { color: 'text-indigo-400', barColor: 'to-indigo-400' },
+  { color: 'text-rose-400', barColor: 'to-rose-400' },
+];
+
 // Minimal Card Component
 const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
   <div className={`bg-slate-900 border border-slate-800 rounded-xl ${className}`}>
@@ -69,8 +81,7 @@ const AdminDashboard: React.FC = () => {
     name: '',
     icon: '',
     level: 50,
-    color: 'text-slate-400',
-    barColor: 'to-slate-400',
+    ...THEME_COLORS[Math.floor(Math.random() * THEME_COLORS.length)],
     category: 'Frontend'
   };
 
@@ -685,6 +696,15 @@ const SkillForm: React.FC<{
     onSave(formData);
   };
 
+  const handleRandomizeColors = () => {
+    const randomTheme = THEME_COLORS[Math.floor(Math.random() * THEME_COLORS.length)];
+    setFormData({
+      ...formData,
+      color: randomTheme.color,
+      barColor: randomTheme.barColor
+    });
+  };
+
   return (
     <Card className="p-8 max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -764,26 +784,38 @@ const SkillForm: React.FC<{
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Text Color Class</label>
-            <input
-              type="text"
-              value={formData.color}
-              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-              placeholder="text-cyan-400"
-              className="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors"
-            />
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-medium text-slate-300">Theme Colors</label>
+            <button
+              type="button"
+              onClick={handleRandomizeColors}
+              className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+            >
+              <Loader2 size={12} className="animate-spin-slow" /> Randomize
+            </button>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Bar Color Class</label>
-            <input
-              type="text"
-              value={formData.barColor}
-              onChange={(e) => setFormData({ ...formData, barColor: e.target.value })}
-              placeholder="to-cyan-400"
-              className="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs text-slate-500 mb-1.5">Text Color Class</label>
+              <input
+                type="text"
+                value={formData.color}
+                onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                placeholder="text-cyan-400"
+                className="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-slate-500 mb-1.5">Bar Color Class</label>
+              <input
+                type="text"
+                value={formData.barColor}
+                onChange={(e) => setFormData({ ...formData, barColor: e.target.value })}
+                placeholder="to-cyan-400"
+                className="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-lg text-white focus:border-indigo-500 focus:outline-none transition-colors"
+              />
+            </div>
           </div>
         </div>
       </form>
