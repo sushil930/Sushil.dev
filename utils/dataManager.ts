@@ -33,19 +33,9 @@ export const getProjects = async (): Promise<Project[]> => {
     const firebaseProjects = await getProjectsFromFirebase();
     
     if (firebaseProjects.length > 0) {
-      // Cache in localStorage (including images)
-      const localProjects = getProjectsFromLocalStorage();
-      // Merge Firebase data with local images
-      const mergedProjects = firebaseProjects.map(fbProject => {
-        const localProject = localProjects?.find(p => p.id === fbProject.id);
-        return {
-          ...fbProject,
-          image: localProject?.image || '',
-          screenshots: localProject?.screenshots || [],
-        };
-      });
-      saveProjectsToLocalStorage(mergedProjects);
-      return mergedProjects;
+      // Save to localStorage for offline backup, but trust Firebase as source of truth
+      saveProjectsToLocalStorage(firebaseProjects);
+      return firebaseProjects;
     }
     
     // Fallback to localStorage
@@ -79,10 +69,10 @@ const saveProjectsToLocalStorage = (projects: Project[]): void => {
 export const saveProjects = async (projects: Project[]): Promise<void> => {
   if (typeof window === 'undefined') return;
   
-  // Save to localStorage (with images)
+  // Save to localStorage
   saveProjectsToLocalStorage(projects);
   
-  // Save to Firebase (without images)
+  // Save to Firebase (full data)
   try {
     for (const project of projects) {
       await saveProjectToFirebase(project);

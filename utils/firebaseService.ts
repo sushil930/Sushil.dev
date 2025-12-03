@@ -60,10 +60,9 @@ export const getProjectsFromFirebase = async (): Promise<Project[]> => {
 export const saveProjectToFirebase = async (project: Project): Promise<void> => {
   try {
     const projectRef = doc(db, COLLECTIONS.PROJECTS, project.id.toString());
-    // Exclude thumbnail and screenshots from Firebase storage
-    const { image, screenshots, ...projectData } = project;
+    // Save full project data including images
     await setDoc(projectRef, {
-      ...projectData,
+      ...project,
       updatedAt: Timestamp.now(),
     });
   } catch (error) {
@@ -75,10 +74,9 @@ export const saveProjectToFirebase = async (project: Project): Promise<void> => 
 export const updateProjectInFirebase = async (id: number, updatedProject: Project): Promise<void> => {
   try {
     const projectRef = doc(db, COLLECTIONS.PROJECTS, id.toString());
-    // Exclude thumbnail and screenshots from Firebase storage
-    const { image, screenshots, ...projectData } = updatedProject;
+    // Save full project data including images
     await updateDoc(projectRef, {
-      ...projectData,
+      ...updatedProject,
       updatedAt: Timestamp.now(),
     });
   } catch (error) {
