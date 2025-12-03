@@ -1,20 +1,24 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
 node_modules
 dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
-
-pixelDev-serviceaccountkey.json
-server/pixelDev-serviceaccountkey.json
-client/pixelDev-serviceaccountkey.json
-
-# Environment variables
-.env
-.env.local
-.env.development
-.env.production
-.env.test
-
-# Do not ignore .env.example files, which are meant to be checked in.
-!.env.example
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
