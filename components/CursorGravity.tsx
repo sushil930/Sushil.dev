@@ -12,6 +12,9 @@ const CursorGravity: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Disable on mobile - check early to avoid setting up listeners
+    if (window.innerWidth < 768) return;
+
     // Set canvas size
     const updateCanvasSize = () => {
       canvas.width = window.innerWidth;

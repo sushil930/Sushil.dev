@@ -28,6 +28,12 @@ const Skills: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // Force visible on mobile to avoid intersection observer issues
+    if (window.innerWidth < 768) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

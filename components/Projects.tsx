@@ -29,8 +29,10 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
           loading="lazy"
           decoding="async" 
           onLoad={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(true)}
           // Removed group-hover:scale-110 to reduce "blur"/motion distraction
-          className={`w-full h-full object-cover transition-all duration-700 ease-out ${imageLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'}`}
+          // Changed opacity-0 to opacity-100 to ensure visibility on mobile
+          className={`w-full h-full object-cover transition-all duration-700 ease-out ${imageLoaded ? 'opacity-100 blur-0' : 'opacity-100 blur-sm'}`}
         />
       </div>
 
