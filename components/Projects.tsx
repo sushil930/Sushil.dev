@@ -13,12 +13,12 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
     <LiquidGlassCard 
       // Removed hover:scale-[1.02]
       // Changed shadow to black and reduced spread (volume)
-      className="group transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] flex flex-col h-full cursor-pointer"
+      className="group transition-all duration-300 md:hover:shadow-[0_20px_40px_rgba(0,0,0,0.6)] flex flex-col h-full cursor-pointer"
       onClick={onClick}
     >
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden bg-slate-800/50">
-         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10" />
+         <div className="absolute inset-0 bg-black/10 md:group-hover:bg-transparent transition-colors z-10" />
          
          {/* Loading Placeholder */}
          <div className={`absolute inset-0 bg-slate-800 animate-pulse transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`} />
@@ -38,7 +38,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
 
       {/* Content */}
       <div className="p-6 flex flex-col flex-grow">
-        <h3 className="font-pixel text-sm text-white mb-2 group-hover:text-neon-green transition-colors duration-300">{project.title}</h3>
+        <h3 className="font-pixel text-sm text-white mb-2 md:group-hover:text-neon-green transition-colors duration-300">{project.title}</h3>
         <p className="text-slate-300 text-sm mb-4 flex-grow line-clamp-3">
           {project.description}
         </p>
@@ -46,7 +46,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
         {/* Tech Stack */}
         <div className="flex flex-wrap gap-2 mb-6">
           {(project.tech || []).map(t => (
-            <span key={t} className="text-[10px] uppercase font-mono px-2 py-1 bg-slate-800/50 text-slate-300 rounded border border-slate-700/50 group-hover:border-slate-500 transition-colors backdrop-blur-sm">
+            <span key={t} className="text-[10px] uppercase font-mono px-2 py-1 bg-slate-800/50 text-slate-300 rounded border border-slate-700/50 md:group-hover:border-slate-500 transition-colors backdrop-blur-sm">
               {t}
             </span>
           ))}

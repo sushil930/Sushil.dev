@@ -39,7 +39,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onClose }) => 
           
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 p-2 bg-slate-950/50 hover:bg-slate-900 text-slate-400 hover:text-white rounded-full border border-slate-800 transition-colors backdrop-blur-sm"
+            className="absolute top-4 right-4 z-20 p-2 bg-slate-950/50 md:hover:bg-slate-900 text-slate-400 md:hover:text-white active:text-white rounded-full border border-slate-800 transition-colors backdrop-blur-sm"
           >
             <X size={24} />
           </button>

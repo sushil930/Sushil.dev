@@ -88,10 +88,10 @@ const Skills: React.FC = () => {
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <LiquidGlassCard className="h-full p-6 group hover:-translate-y-2 transition-transform duration-300">
+              <LiquidGlassCard className="h-full p-6 group md:hover:-translate-y-2 transition-transform duration-300">
                 <div className="flex flex-col h-full">
                   <div className="flex justify-between items-start mb-4">
-                    <div className={`p-3 rounded-xl bg-slate-900/50 border border-slate-700/50 ${skill.color} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`p-3 rounded-xl bg-slate-900/50 border border-slate-700/50 ${skill.color} md:group-hover:scale-110 transition-transform duration-300`}>
                       <Icon icon={skill.icon} width="24" height="24" />
                     </div>
                     <span className="font-mono text-xs text-slate-500 border border-slate-800 px-2 py-1 rounded-full bg-slate-900/30">

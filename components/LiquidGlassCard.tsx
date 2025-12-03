@@ -17,7 +17,9 @@ const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ children, className =
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    // Disable specular highlight on touch devices/mobile to improve performance
+    if (!cardRef.current || window.matchMedia('(hover: none)').matches) return;
+    
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;

@@ -45,9 +45,9 @@ const SocialButton: React.FC<{ iconSrc: string; label: string; href: string; col
     href={href} 
     target="_blank" 
     rel="noopener noreferrer" 
-    className="group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+    className="group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-lg"
   >
-    <div className={`p-3 rounded-full bg-slate-900/50 text-slate-300 group-hover:text-white transition-colors group-hover:scale-110 duration-300`}>
+    <div className={`p-3 rounded-full bg-slate-900/50 text-slate-300 group-hover:text-white transition-colors md:group-hover:scale-110 duration-300`}>
       <SvgIcon src={iconSrc} size={28} />
     </div>
     <span className="text-xs font-medium text-slate-400 group-hover:text-neon-green transition-colors">{label}</span>

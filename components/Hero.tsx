@@ -38,7 +38,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+    <section id="home" className="relative min-h-[100dvh] flex items-center justify-center pt-16 overflow-hidden">
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         
@@ -78,10 +78,10 @@ const Hero: React.FC = () => {
             aria-label="View Projects"
           >
             <LiquidGlassCard 
-              className="px-8 py-4 border border-neon-green/30 hover:border-neon-green/80 transition-all duration-300 hover:shadow-[0_0_20px_rgba(74,222,128,0.3)] hover:-translate-y-1 rounded-[20px]"
+              className="px-8 py-4 border border-neon-green/30 md:hover:border-neon-green/80 transition-all duration-300 md:hover:shadow-[0_0_20px_rgba(74,222,128,0.3)] md:hover:-translate-y-1 rounded-[20px]"
               style={{ '--bg-color': 'rgba(74, 222, 128, 0.15)' } as React.CSSProperties}
             >
-               <span className="flex items-center gap-3 text-sm font-semibold text-neon-green group-hover:text-white transition-colors">
+               <span className="flex items-center gap-3 text-sm font-semibold text-neon-green md:group-hover:text-white transition-colors">
                  <Zap className="w-4 h-4" /> View Projects
                </span>
             </LiquidGlassCard>
@@ -92,10 +92,10 @@ const Hero: React.FC = () => {
             aria-label="Get in Touch"
           >
              <LiquidGlassCard 
-               className="px-8 py-4 border border-neon-purple/30 hover:border-neon-purple/80 transition-all duration-300 hover:shadow-[0_0_20px_rgba(216,180,254,0.3)] hover:-translate-y-1 rounded-[20px]"
+               className="px-8 py-4 border border-neon-purple/30 md:hover:border-neon-purple/80 transition-all duration-300 md:hover:shadow-[0_0_20px_rgba(216,180,254,0.3)] md:hover:-translate-y-1 rounded-[20px]"
                style={{ '--bg-color': 'rgba(216, 180, 254, 0.15)' } as React.CSSProperties}
              >
-               <span className="flex items-center gap-3 text-sm font-semibold text-neon-purple group-hover:text-white transition-colors">
+               <span className="flex items-center gap-3 text-sm font-semibold text-neon-purple md:group-hover:text-white transition-colors">
                  Get in Touch
                </span>
             </LiquidGlassCard>

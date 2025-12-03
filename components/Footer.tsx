@@ -46,7 +46,7 @@ const Rating: React.FC<RatingProps> = ({ onRate, submitted, ratingData, hasRated
             key={star}
             disabled={hasRated}
             className={`relative group focus:outline-none transition-transform p-1 ${
-              hasRated ? 'cursor-default' : 'hover:scale-110 active:scale-95'
+              hasRated ? 'cursor-default' : 'md:hover:scale-110 active:scale-95'
             }`}
             onMouseEnter={() => !hasRated && setHover(star)}
             onMouseLeave={() => !hasRated && setHover(0)}
@@ -58,11 +58,11 @@ const Rating: React.FC<RatingProps> = ({ onRate, submitted, ratingData, hasRated
               className={`transition-all duration-300 ${
                 star <= (hover || rating)
                   ? 'fill-neon-green text-neon-green drop-shadow-[0_0_8px_rgba(74,222,128,0.6)]'
-                  : 'text-slate-700 fill-transparent group-hover:text-slate-500'
+                  : 'text-slate-700 fill-transparent md:group-hover:text-slate-500'
               }`}
             />
             {!hasRated && (
-              <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-mono rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
+              <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-mono rounded opacity-0 md:group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
                 {messages[star]}
               </span>
             )}
