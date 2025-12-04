@@ -54,8 +54,9 @@ const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ children, className =
       {/* 
         SVG Filter Definition 
         Fixed scale to 0 or very low to prevent distortion
+        Hidden on mobile for performance
       */}
-      <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+      <svg className="absolute w-0 h-0 pointer-events-none hidden md:block" aria-hidden="true">
         <defs>
           <filter id={filterId}>
             <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
@@ -70,9 +71,9 @@ const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ children, className =
         </defs>
       </svg>
 
-      {/* Layer 1: Glass Filter (Blur only, no distortion) */}
+      {/* Layer 1: Glass Filter (Desktop: Blur + SVG Distortion) */}
       <div
-        className="absolute inset-0 z-10 pointer-events-none"
+        className="absolute inset-0 z-10 pointer-events-none hidden md:block"
         style={{
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
@@ -81,9 +82,18 @@ const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ children, className =
         }}
       />
 
-      {/* Layer 2: Animated Distortion Overlay (Optional: keep for subtle texture or remove if needed. Keeping for style.) */}
+      {/* Layer 1b: Mobile Fallback (Simple Blur, No SVG, No Saturation boost if expensive) */}
+      <div
+        className="absolute inset-0 z-10 pointer-events-none block md:hidden"
+        style={{
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+        }}
+      />
+
+      {/* Layer 2: Animated Distortion Overlay (Hidden on mobile) */}
       <div 
-        className="absolute inset-0 z-20 animate-[floatDistort_10s_infinite_ease-in-out] opacity-30 mix-blend-overlay pointer-events-none"
+        className="absolute inset-0 z-20 animate-[floatDistort_10s_infinite_ease-in-out] opacity-30 mix-blend-overlay pointer-events-none hidden md:block"
         style={{
           backgroundImage: `radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 80%),
                             radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 80%)`,
