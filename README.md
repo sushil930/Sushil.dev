@@ -1,7 +1,3 @@
-```
-
-```
-
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/ogimage.png" alt="Sushil.dev Banner" width="100%">
