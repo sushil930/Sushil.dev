@@ -59,7 +59,7 @@ const Hero: React.FC = () => {
         {/* Subheading - Staggered Item 2 */}
         <div className={`transition-all duration-1000 delay-300 ease-out transform ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <p className="text-neon-green text-lg md:text-xl mb-6 font-mono">
-            React • TypeScript • UI Engineering
+            React • TypeScript • UI Developing
           </p>
         </div>
 

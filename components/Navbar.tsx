@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
           <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
             <Terminal className="h-6 w-6 text-neon-green group-hover:text-white transition-colors" />
             <span className="font-pixel text-neon-green text-sm md:text-base group-hover:text-white transition-colors">
-              DEV.STUDIO
+              SUSHIL.DEV
             </span>
           </div>
 

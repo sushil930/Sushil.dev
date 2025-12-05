@@ -193,7 +193,7 @@ const Footer: React.FC = () => {
           }`}>
           
           <p className="font-pixel text-[10px] text-slate-400 uppercase tracking-widest hover:text-neon-green transition-colors cursor-default order-2 md:order-1 text-center">
-            © {new Date().getFullYear()} Sushil.dev. Insert Coin to Continue.
+            © {new Date().getFullYear()} sushil.dev. Insert Coin to Continue.
           </p>
 
           <div className="order-1 md:order-2">

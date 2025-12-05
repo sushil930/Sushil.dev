@@ -39,13 +39,13 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
       {/* Content */}
       <div className="p-6 flex flex-col flex-grow">
         <h3 className="font-pixel text-sm text-white mb-2 md:group-hover:text-neon-green transition-colors duration-300">{project.title}</h3>
-        <p className="text-slate-300 text-sm mb-4 flex-grow line-clamp-3">
+        <p className="text-slate-300 text-sm mb-4 flex-grow line-clamp-2 min-h-[2.5rem]">
           {project.description}
         </p>
         
         {/* Tech Stack */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {(project.tech || []).map(t => (
+        <div className="flex flex-wrap gap-2 mb-6 overflow-hidden max-h-[1.75rem]">
+          {(project.tech || []).slice(0, 4).map(t => (
             <span key={t} className="text-[10px] uppercase font-mono px-2 py-1 bg-slate-800/50 text-slate-300 rounded border border-slate-700/50 md:group-hover:border-slate-500 transition-colors backdrop-blur-sm">
               {t}
             </span>
@@ -59,7 +59,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
               className="border border-neon-green/40 hover:border-neon-green transition-all duration-300 hover:shadow-[0_0_20px_rgba(74,222,128,0.4)] rounded-lg p-0.5"
               style={{ '--bg-color': 'rgba(74, 222, 128, 0.15)' } as React.CSSProperties}
             >
-              <div className="flex items-center justify-center gap-2 px-4 py-2 text-neon-green hover:text-white transition-colors font-mono text-sm">
+              <div className="flex items-center justify-center gap-2 px-4 py-2 text-neon-green hover:text-white transition-colors font-mono text-xs whitespace-nowrap">
                 <Monitor size={14} /> Live
               </div>
             </LiquidGlassCard>
@@ -69,7 +69,7 @@ const ProjectCard: React.FC<{ project: Project; onClick: () => void }> = ({ proj
               className="border border-white/20 hover:border-white/60 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] rounded-lg p-0.5"
               style={{ '--bg-color': 'rgba(255, 255, 255, 0.08)' } as React.CSSProperties}
             >
-              <div className="flex items-center justify-center gap-2 px-4 py-2 text-white/80 hover:text-white transition-colors font-mono text-sm">
+              <div className="flex items-center justify-center gap-2 px-4 py-2 text-white/80 hover:text-white transition-colors font-mono text-xs whitespace-nowrap">
                 <Github size={14} /> Code
               </div>
             </LiquidGlassCard>
