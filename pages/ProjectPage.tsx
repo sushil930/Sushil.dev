@@ -6,7 +6,6 @@ import { Project } from '../types';
 import Button from '../components/Button';
 import LiquidGlassCard from '../components/LiquidGlassCard';
 import CursorGravity from '../components/CursorGravity';
-import { Helmet } from 'react-helmet-async';
 
 const ProjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -63,37 +62,6 @@ const ProjectPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 relative text-slate-200 pb-20">
-      <Helmet>
-        <title>{`${project.title} | Sushil.dev`}</title>
-        <meta
-          name="description"
-          content={project.longDescription || project.description}
-        />
-        {/* Open Graph */}
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={`${project.title} | Sushil.dev`} />
-        <meta
-          property="og:description"
-          content={project.longDescription || project.description}
-        />
-        <meta
-          property="og:url"
-          content={`https://sushil.dev/project/${project.id}`}
-        />
-        <meta property="og:image" content={project.image} />
-        <meta
-          property="og:image:alt"
-          content={`Preview of project ${project.title} by Sushil`} 
-        />
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${project.title} | Sushil.dev`} />
-        <meta
-          name="twitter:description"
-          content={project.longDescription || project.description}
-        />
-        <meta name="twitter:image" content={project.image} />
-      </Helmet>
       {/* Cursor Gravity Effect */}
       <CursorGravity />
       

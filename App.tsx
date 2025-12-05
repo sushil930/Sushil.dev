@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Projects from './components/Projects';
@@ -84,9 +83,8 @@ function App() {
   }
 
   return (
-    <HelmetProvider>
-      <Router>
-        <div className="min-h-screen bg-slate-950 relative selection:bg-neon-green selection:text-slate-950">
+    <Router>
+      <div className="min-h-screen bg-slate-950 relative selection:bg-neon-green selection:text-slate-950">
         
         {/* Cursor Gravity Effect */}
         <CursorGravity />
@@ -129,8 +127,7 @@ function App() {
           </Routes>
         </div>
       </div>
-      </Router>
-    </HelmetProvider>
+    </Router>
   );
 }
 
