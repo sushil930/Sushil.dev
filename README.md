@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/ogimage.png" alt="Sushil.dev Banner" width="100%" />
+<img src="https://res.cloudinary.com/de4uhtgmb/image/upload/v1764963031/Untitled_design_z8fexl.jpg" alt="Sushil.dev Banner" width="100%" />
 
 # 🎮 Sushil.dev — Retro-Modern Developer Portfolio
 
@@ -87,8 +87,8 @@
 
 <div align="center">
 
-### 🏠 Hero Section  
-<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/ogimage.png" alt="Hero Section" width="80%" />
+### 🏠 Project Section  
+<img src="https://res.cloudinary.com/de4uhtgmb/image/upload/v1764966678/Screenshot_2025-12-06_015954_p0rwj1.png" alt="Hero Section" width="80%" />
 
 ### 🎯 Skills Matrix  
 <img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/screenshots/skills-grid.png" alt="Skills Matrix" width="80%" />
