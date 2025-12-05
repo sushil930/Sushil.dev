@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/ogimage.png" alt="Sushil.dev Banner" width="100%">
+<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/ogimage.png" alt="Sushil.dev Banner" width="100%" />
 
 # 🎮 Sushil.dev — Retro-Modern Developer Portfolio
 
 **A pixel-perfect, performance-focused portfolio with a gamer aesthetic and liquid glass UI**
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-4A DE80?style=for-the-badge)](https://sushil.dev)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-4ADE80?style=for-the-badge)](https://sushil.dev)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 [![Made with React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -22,31 +22,37 @@
 
 **Sushil.dev** is a high-performance, retro-inspired developer portfolio combining modern web technologies with a nostalgic gamer aesthetic. Built with React, TypeScript, and Tailwind CSS, it features smooth animations, liquid glass morphism, interactive UI elements, and a fully functional admin dashboard for content management.
 
-### ✨ Features
+---
 
-#### 🎨 Design & UX
+## ✨ Features
 
-- **Liquid Glass Morphism** — Blur effects, dynamic specular highlights, and SVG distortion filters
-- **Retro Gaming Theme** — Pixel fonts, CRT scanlines, neon colors, and arcade-style loading screens
-- **Responsive Mobile-First** — Optimized for all devices with dynamic viewport units (`dvh`)
-- **Smooth Animations** — CSS transitions, hover states (desktop-only), and scroll-triggered reveals
-- **Cursor Gravity Effect** — Interactive elements react to mouse position
+### 🎨 Design & UX
 
-#### 🛠️ Functionality
+- **Liquid Glass Morphism** — Blur effects, dynamic highlights, SVG distortion filters  
+- **Retro Gaming Theme** — Pixel fonts, CRT scanlines, neon colors, arcade loading screens  
+- **Responsive Mobile-First** — Optimized layout using `dvh` viewport units  
+- **Smooth Animations** — Hover transitions, scroll-based reveals  
+- **Cursor Gravity Effect** — UI reacts to cursor movement  
 
-- **Dynamic Project Showcase** — Filter, search, and view detailed project pages
-- **Admin Dashboard** — Secure login, CRUD operations for projects, skills, and content
-- **Firebase Integration** — Real-time database for ratings, auth, and content storage
-- **Cloudinary CDN** — Fast image delivery and optimization
-- **SEO Optimized** — Open Graph, Twitter cards, structured metadata, and favicons
-- **PWA Ready** — Web manifest and service worker support
+---
 
-#### 🔥 Performance
+### 🛠️ Functionality
 
-- **Lazy Loading** — Images and routes load on-demand
-- **Code Splitting** — Optimized bundle sizes with Vite
-- **Mobile Optimizations** — Reduced animations, simplified effects, no hover stickiness
-- **Lighthouse Score** — 95+ performance on desktop/mobile
+- **Dynamic Project Showcase** with filters and details  
+- **Admin Dashboard** with secure CRUD  
+- **Firebase Integration** for real-time data and auth  
+- **Cloudinary CDN** for image delivery  
+- **SEO Optimized** (OG tags, Twitter cards, metadata)  
+- **PWA Ready** with service worker  
+
+---
+
+### 🔥 Performance
+
+- **Lazy Loading** for routes & images  
+- **Code Splitting** (Vite optimized)  
+- **Reduced animation load on mobile**  
+- **Lighthouse Score:** 95+  
 
 ---
 
@@ -81,17 +87,14 @@
 
 <div align="center">
 
-### 🏠 Hero Section
+### 🏠 Hero Section  
+<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/ogimage.png" alt="Hero Section" width="80%" />
 
-<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/ogimage.png" alt="Hero Section" width="80%">
+### 🎯 Skills Matrix  
+<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/screenshots/skills-grid.png" alt="Skills Matrix" width="80%" />
 
-### 🎯 Skills Matrix
-
-<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/screenshots/skills-grid.png" alt="Skills Matrix" width="80%">
-
-### 🎮 Admin Dashboard
-
-<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/screenshots/admin%20panal.png" alt="Admin Dashboard" width="80%">
+### 🎮 Admin Dashboard  
+<img src="https://raw.githubusercontent.com/sushil930/Sushil.dev/refs/heads/main/icons/screenshots/admin%20panal.png" alt="Admin Dashboard" width="80%" />
 
 </div>
 
@@ -101,9 +104,11 @@
 
 ### Prerequisites
 
-- **Node.js** 18+ and npm/yarn
-- **Firebase Account** (for database and auth)
-- **Cloudinary Account** (for image hosting)
+- Node.js 18+  
+- Firebase Account  
+- Cloudinary Account  
+
+---
 
 ### 1️⃣ Clone the Repository
 
