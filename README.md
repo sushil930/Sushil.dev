@@ -6,13 +6,13 @@
 
 **A pixel-perfect, performance-focused portfolio with a gamer aesthetic and liquid glass UI**
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-4ADE80?style=for-the-badge)](https://sushil.dev)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-4ADE80?style=for-the-badge)](https://sushil-dev.vercel.app)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 [![Made with React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-[✨ Features](#-features) • [🚀 Live Demo](https://sushil.dev) • [💻 Tech Stack](#-tech-stack) • [📦 Installation](#-installation) • [🎨 Screenshots](#-screenshots)
+[✨ Features](#-features) • [🚀 Live Demo](https://sushil-dev.vercel.app) • [💻 Tech Stack](#-tech-stack) • [📦 Installation](#-installation) • [🎨 Screenshots](#-screenshots)
 
 </div>
 
