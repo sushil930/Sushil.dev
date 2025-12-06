@@ -151,7 +151,7 @@ const Contact: React.FC = () => {
 
             <div className="flex items-center gap-3 text-slate-500 text-sm bg-white/5 p-4 rounded-xl border border-white/5 w-fit">
               <MapPin size={16} className="text-neon-purple" />
-              <span>Based in Bengaluru, India • GMT+5:30</span>
+              <span>Based in Chhattisgarh, India • GMT+5:30</span>
             </div>
           </div>
 
