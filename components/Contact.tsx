@@ -6,7 +6,7 @@ import GithubIcon from '../icons/github.svg';
 import LinkedinIcon from '../icons/linkedin.svg';
 import EnvelopeIcon from '../icons/envelope-solid.svg';
 
-const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'hello@sushil.dev';
+const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'sushilpatel5113@gmail.com';
 
 // SVG Icon Component
 const SvgIcon: React.FC<{ src: string; size?: number }> = ({ src, size = 28 }) => (
